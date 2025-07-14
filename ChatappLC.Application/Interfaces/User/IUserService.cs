@@ -12,5 +12,7 @@ namespace ChatappLC.Application.Interfaces.User
         Task<List<UserResponse>> GetAllUsersExceptAsync(string currentUserId);
         Task<List<UserInfoDTO>> GetUsersByListIdsAsync(List<string> userIds);
         Task<bool> LogoutAsync(string refreshToken);
+        Task<bool> VerifyEmailAsync(string token);
+
     }
 }

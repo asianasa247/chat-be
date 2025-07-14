@@ -1,5 +1,6 @@
 ﻿using ChatappLC.Application.Interfaces.Admin;
 using ChatappLC.Infrastructure.Services.Admin;
+using ChatappLC.Infrastructure.ServicesPlugin;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,7 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IFriendService, FriendService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // Đăng ký Chat services và repositories
 builder.Services.InfrastructureServices(builder.Configuration);

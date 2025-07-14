@@ -89,5 +89,18 @@ namespace ChatappLC.API.Controllers.V1
             return Ok(list); // Bây giờ list là List<UserResponse>
         }
 
+        [HttpDelete("remove")]
+        [Authorize]
+        public async Task<IActionResult> RemoveFriend(string friendId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return Unauthorized();
+
+            var success = await _friendService.RemoveFriendAsync(userId, friendId);
+            if (!success) return NotFound("Friend relationship not found.");
+
+            return Ok("Friend removed successfully.");
+        }
+
     }
 }

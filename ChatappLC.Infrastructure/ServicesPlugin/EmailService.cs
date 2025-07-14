@@ -1,10 +1,20 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Net.Mail;
+using System.Text.Json;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Configuration;
 
 namespace ChatappLC.Infrastructure.ServicesPlugin;
 
-internal class EmailService : IEmailService
+public class EmailService : IEmailService
 {
+    private readonly IConfiguration _configuration;
+
+    public EmailService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
     private bool IsValidEmail(string email)
     {
         var emailRegex = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
@@ -18,41 +28,64 @@ internal class EmailService : IEmailService
             return false;
         }
 
-        var apiKey = "4PNRFN4UXN8TU129E55A";
+        var apiKey = _configuration["EmailSettings:MailboxValidatorApiKey"]; // moved key to config
         var url = $"https://api.mailboxvalidator.com/v1/validation/single?key={apiKey}&email={email}";
-
-        Console.WriteLine($"Starting email validation for {email}");
 
         using (var client = new HttpClient())
         {
-            var response = await client.GetAsync(url);
-
-            Console.WriteLine($"Response: {response}");
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var rawContent = await response.Content.ReadAsStringAsync();
+                var response = await client.GetAsync(url);
 
-                // Sử dụng JsonDocument để phân tích JSON và lấy giá trị của IsVerified
-                using (JsonDocument doc = JsonDocument.Parse(rawContent))
+                if (response.IsSuccessStatusCode)
                 {
-                    if (doc.RootElement.TryGetProperty("is_verified", out JsonElement isVerifiedElement))
+                    var rawContent = await response.Content.ReadAsStringAsync();
+
+                    using (JsonDocument doc = JsonDocument.Parse(rawContent))
                     {
-                        string isVerified = isVerifiedElement.GetString();
-                        Console.WriteLine($"Parsed IsVerified value: {isVerified}");
-                        return isVerified == "True";
-                    }
-                    else
-                    {
-                        Console.WriteLine("Error: 'is_verified' property not found in JSON response.");
+                        if (doc.RootElement.TryGetProperty("is_verified", out JsonElement isVerifiedElement))
+                        {
+                            string isVerified = isVerifiedElement.GetString();
+                            return isVerified == "True";
+                        }
                     }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine($"Failed to validate email {email}. StatusCode: {response.StatusCode}");
+                Console.WriteLine($"Email verification error: {ex.Message}");
             }
         }
+
         return false;
+    }
+
+    public async Task SendEmailAsync(string toEmail, string subject, string htmlContent)
+    {
+        var smtpHost = _configuration["EmailSettings:SmtpHost"];       // e.g. smtp.gmail.com
+        var smtpPort = int.Parse(_configuration["EmailSettings:SmtpPort"]); // e.g. 587
+        var fromEmail = _configuration["EmailSettings:FromEmail"];
+        var password = _configuration["EmailSettings:Password"];
+
+        try
+        {
+            using var client = new SmtpClient(smtpHost, smtpPort)
+            {
+                Credentials = new NetworkCredential(fromEmail, password),
+                EnableSsl = true
+            };
+
+            var message = new MailMessage(fromEmail, toEmail, subject, htmlContent)
+            {
+                IsBodyHtml = true
+            };
+
+            await client.SendMailAsync(message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error sending email to {toEmail}: {ex.Message}");
+            throw; // optional: throw again if you want controller to handle it
+        }
     }
 }
