@@ -13,5 +13,7 @@ namespace ChatappLC.Application.Interfaces.Friend
 
         Task<List<FriendRequest>> GetPendingRequestsAsync(string userId);
         Task<FriendRequest?> GetByIdAsync(string requestId);
+        Task<bool> RemoveFriendAsync(string userId1, string userId2);
+
     }
 }

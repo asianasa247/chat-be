@@ -10,5 +10,9 @@ public class User
     public string Image { get; set; } = string.Empty;
     public required string Password { get; set; }
     public string Role { get; set; } = string.Empty;
+    public bool IsVerify { get; set; } = false;
+    public string VerifyToken { get; set; } = string.Empty;
+
 }
+
 

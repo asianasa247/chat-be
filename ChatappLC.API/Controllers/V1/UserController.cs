@@ -1,4 +1,6 @@
-﻿namespace ChatappLC.API.Controllers.V1;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace ChatappLC.API.Controllers.V1;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -55,5 +57,15 @@ public class UserController : BaseController
 
         var users = await _userService.GetAllUsersExceptAsync(currentUserId);
         return Ok(users);
+    }
+
+    [HttpGet("verify-email")]
+    public async Task<IActionResult> VerifyEmail(string token)
+    {
+        var success = await _userService.VerifyEmailAsync(token);
+        if (!success)
+            return BadRequest("Invalid or expired verification token.");
+
+        return Ok("Email verified successfully!");
     }
 }

@@ -83,5 +83,26 @@ namespace ChatappLC.Infrastructure.Services.Friend
                 .Find(r => r.Id == requestId)
                 .FirstOrDefaultAsync();
         }
+        public async Task<bool> RemoveFriendAsync(string userId1, string userId2)
+        {
+            // Tìm mối quan hệ bạn bè đã được chấp nhận giữa 2 người
+            var filter = Builders<FriendRequest>.Filter.And(
+                Builders<FriendRequest>.Filter.Eq(x => x.IsAccepted, true),
+                Builders<FriendRequest>.Filter.Or(
+                    Builders<FriendRequest>.Filter.And(
+                        Builders<FriendRequest>.Filter.Eq(x => x.SenderId, userId1),
+                        Builders<FriendRequest>.Filter.Eq(x => x.ReceiverId, userId2)
+                    ),
+                    Builders<FriendRequest>.Filter.And(
+                        Builders<FriendRequest>.Filter.Eq(x => x.SenderId, userId2),
+                        Builders<FriendRequest>.Filter.Eq(x => x.ReceiverId, userId1)
+                    )
+                )
+            );
+
+            var result = await _friendRequests.DeleteOneAsync(filter);
+            return result.DeletedCount > 0;
+        }
+
     }
 }
