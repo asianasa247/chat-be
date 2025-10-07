@@ -1,0 +1,17 @@
+﻿namespace ManageEmployee.DataTransferObject.CustomerModels
+{
+    public class CustomerContactHistoryDetailModel
+    {
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
+        public string? Contact { get; set; }
+        public string? Position { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
+        public DateTime? NextTime { get; set; }
+        public string? ExchangeContent { get; set; }
+        public int? StatusId { get; set; }
+        public int? JobsId { get; set; }
+        public string? FileLinkStr { get; set; }
+    }
+}

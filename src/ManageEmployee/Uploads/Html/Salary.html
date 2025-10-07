@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Tính Lương</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .salary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .salary-table th, .salary-table td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .text-left {
+            text-align: left !important;
+        }
+
+        .salary-table th {
+            background-color: #f2f2f2;
+        }
+
+        .table-title {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .table-title h2 {
+            margin: 0;
+        }
+
+        .signature-section {
+            width: 100%;
+            margin-top: 50px;
+            display: -webkit-box; /* Use -webkit-box for WebKit compatibility */
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-pack: justify; /* Align items with WebKit */
+            -webkit-justify-content: space-between;
+            -ms-flex-pack: justify;
+            justify-content: space-between;
+        }
+
+        .signature-section div {
+            text-align: center;
+        }
+
+        .total-amount {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .footer-text {
+            margin-top: 10px;
+            text-align: right;
+            font-style: italic;
+        }
+
+        company {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: start;
+            -moz-box-pack: start;
+            -ms-flex-pack: start;
+            justify-content: start;
+            padding: 10px;
+            font-size: 11px;
+            flex-direction: column;
+            -webkit-box-orient: vertical;
+        }
+
+        .company img {
+            height: 80px;
+            width: 80px;
+            margin-bottom: 12px;
+            margin-left: 30px;
+        }
+
+        #company-info {
+            line-height: 5px;
+        }
+
+        #company-info h3 {
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        #company-info p {
+            margin: 0;
+            margin-top: 10px;
+        }
+
+        .report-header {
+            display: -webkit-box;
+            -webkit-box-pack: justify;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+            margin-bottom: 30px;
+        }
+
+        .report-title {
+            /* Standard CSS */
+            text-align: center;
+            flex-grow: 1;
+
+            /* Older syntax for WebKit browsers */
+            display: -webkit-box;
+            -webkit-box-flex: 1;
+            -webkit-box-align: center;
+            -webkit-box-pack: center;
+
+            /* Standard flexbox syntax */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .report-title span {
+            padding: 5px;
+        }
+
+        .report-info {
+            /* Older syntax for WebKit browsers */
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-box-pack: center;
+
+            /* Standard flexbox syntax */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            font-size: 10px;
+        }
+
+        .report-info p {
+            margin: 1px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="report-header">
+    <div class="company-info">
+        <div class="company">
+            <img src="[Logo]">
+            <div id="company-info">
+                <h3>[CompanyName]</h3>
+                <p>[CompanyAddress]</p>
+                <p>Mã số thuế: [CompanyTax]</p>
+            </div>
+        </div>
+    </div>
+    <div class="report-title">
+        <div class="title"><br>
+            <h2>BẢNG TÍNH LƯƠNG THÁNG [Month] NĂM [Year]</h2>
+            <p>BỘ PHẬN: BGD + VP + VS + BV + GĐSX + TK + CK + CĐ</p>
+        </div>
+    </div>
+</div>
+
+<table class="salary-table">
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>Mã nhân viên</th>
+        <th>Tên nhân viên</th>
+        <th>Số tài khoản</th>
+        <th>Ngân hàng</th>
+        <th>Số ngày công</th>
+        <th>Tiền lương</th>
+        <th>Lương khoán</th>
+        <th>Chuyên cần</th>
+        <th>Hoa hồng</th>
+        <th>Trừ tiền cơm</th>
+        <th>Còn lại</th>
+    </tr>
+    </thead>
+    <tbody>
+    [TABLE_BODY_SECTION]
+    <template style="visibility: hidden;" id="table-row-template">
+        <tr>
+            <td>[Index]</td>
+            <td class="text-left">[UserName]</td>
+            <td class="text-left">[FullName]</td>
+            <td class="text-left">[BankAccountNumber]</td>
+            <td class="text-left">[BankName]</td>
+            <td>[NumberOfWorkingDays]</td>
+            <td>[Salary]</td>
+            <td>[ContractualSalary]</td>
+            <td>[AllowanceAmount]</td>
+            <td>[SaleCommission]</td>
+            <td>[DeduceMealCost]</td>
+            <td>[RemainingAmount]</td>
+        </tr>
+    </template>
+
+    <tr>
+        <td colspan="5"><strong>Tổng cộng</strong></td>
+        <td>[SumNumberOfWorkingDays]</td>
+        <td>[SumSalary]</td>
+        <td>[SumContractualSalary]</td>
+        <td>[SumAllowanceAmount]</td>
+        <td>[SumSaleCommission]</td>
+        <td>[SumDeduceMealCost]</td>
+        <td>[SumRemainingAmount]</td>
+    </tr>
+    </tbody>
+</table>
+
+<p class="total-amount">Số tiền bằng chữ: [AmountInWord]</p>
+
+
+<div class="signature-section">
+    <div>
+        <br>
+        <p><strong>Người Lập</strong></p>
+    </div>
+    <div>
+        <br>
+        <p><strong>TP.HCNS</strong></p>
+    </div>
+    <div>
+        <br>
+        <p><strong>KT Tổng Hợp</strong></p>
+    </div>
+    <div>
+        <p><i>............Ngày ...... tháng ...... năm  ...... </i></p>
+        <p><strong>Tổng Giám Đốc</strong></p>
+    </div>
+</div>
+
+</body>
+</html>

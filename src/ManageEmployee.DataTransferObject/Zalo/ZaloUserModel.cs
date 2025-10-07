@@ -1,0 +1,31 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ManageEmployee.DataTransferObject.Zalo
+{
+    public class ZaloUserModel
+    {
+        public int Id { get; set; }
+        public long AppId { get; set; }
+        public long UserId { get; set; }
+        public long UserIdByApp { get; set; }
+        public string UserExternalId { get; set; }
+        public string DisplayName { get; set; }
+        public string UserAlias { get; set; }
+        public string IsSensitive { get; set; }
+        public string UserLastInteractionDate { get; set; }
+        public bool UserIsFollower { get; set; }
+        public string Avatar { get; set; }
+        public string Avatars { get; set; }
+        public string TagsAndNotesInfo { get; set; }
+        public string SharedInfo { get; set; }
+    }
+    public class ZaloUserModelV2 : ZaloUserModel
+    {
+        public string userIdV2 => $"{UserId}";
+        public string Note = "";
+    }
+}

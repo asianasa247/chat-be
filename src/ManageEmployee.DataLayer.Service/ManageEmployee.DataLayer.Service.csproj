@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Extensions\**" />
+    <Compile Remove="Models\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <EmbeddedResource Remove="Models\**" />
+    <None Remove="Extensions\**" />
+    <None Remove="Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="AutoMapper.Collection" Version="9.0.0" />
+	<PackageReference Include="Hangfire" Version="1.7.33" />
+	<PackageReference Include="Hangfire.AspNetCore" Version="1.7.33" />
+	<PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
+	<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ManageEmployee.Dal\ManageEmployee.Dal.csproj" />
+    <ProjectReference Include="..\ManageEmployee.DataTransferObject\ManageEmployee.DataTransferObject.csproj" />
+  </ItemGroup>
+
+</Project>

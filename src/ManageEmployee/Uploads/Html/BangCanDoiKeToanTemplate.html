@@ -1,0 +1,139 @@
+<html>
+<head>
+    <style>
+        body{
+            background-color: white;
+        }
+        .txt-left{ 
+            text-align: left; 
+        } 
+        .txt-right{ 
+            text-align: right; 
+        } 
+        .txt-center{ 
+            text-align: center; 
+        }
+        .tbl-style{ 
+            vertical-align: middle;  
+            width: 100%;           
+        }
+        .font-b{
+             font-weight: bold; 
+            }
+        .title-tbl{ 
+            background-color: rgb(252, 213, 180); 
+            font-size: 12px;
+        }
+        table { page-break-inside:auto } 
+        tr { page-break-inside:avoid; page-break-after:auto } 
+        thead { display:table-header-group } 
+        tfoot { display:table-footer-group }
+        .title-tbl tr th,
+        .tbody-replace tr td{
+            border: 1px solid black;
+            border-top: none;
+            border-right: none;
+        }
+
+        .title-tbl tr:first-child th {
+            border-top: 1px solid black;
+        }
+
+        .title-tbl tr th:last-child,
+        .tbody-replace tr td:last-child{
+            border-right: 1px solid black;
+        }
+
+        .tbody-replace{
+            font-size: 11pt;
+            text-align: right;
+        }
+
+        .r-nm-bold{
+            font-weight: bold;
+        }
+
+        .r-nm-italic{
+            font-style: italic;
+        }
+
+    </style>
+</head>
+<body>
+    <table class="tbl-style">
+        <tbody style="font-size: 12pt;">
+            <tr class="txt-left">
+                <td colspan="3">{{{TenCongTy}}}</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="3">{{{DiaChi}}}</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="3">{{{MST}}}</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="6"></td>
+            </tr>
+            <tr class="txt-center font-b" style="font-weight: bold; font-size: 16pt;">
+                <td colspan="6">BẢNG CÂN ĐỐI KẾ TOÁN</td>
+            </tr>
+            <tr class="txt-center">
+                <td colspan="6">Từ tháng {{{TuThang}}} đến tháng {{{DenThang}}} năm {{{Nam}}}</td>
+            </tr>   
+            <tr class="txt-right">
+                <td colspan="6">Đơn vị tính: Đồng</td>
+            </tr>         
+        </tbody>
+    </table>
+    <table class="tbl-style" cellspacing="0" cellpadding="7">
+        <thead class="font-b txt-center title-tbl" style="font-size: 12pt;">            
+            <tr>
+                <th rowspan="1">TÀI SẢN</th>
+                <th rowspan="1">MÃ SỐ</th>
+                <th colspan="1">TM</th>                
+                <th colspan="1">SỐ ĐẦU NĂM</th>
+                <th colspan="1">SỐ CUỐI NĂM</th>
+            </tr>
+        </thead>        
+        <tbody class="tbody-replace">
+            ##TOTAL_REPLACE_PLACE##           
+        </tbody>
+        <tbody class="txt-center font-b">
+            <tr>
+                <td colspan="2" style="border: none;"></td>
+                <td colspan="2" style="border: none;"></td>
+                <td colspan="2" style="border: none;font-style: italic;">Ngày ..... tháng ..... năm .....</td>
+            </tr>
+            <tr class="txt-center">
+                <td colspan="2" style="border: none;">Người lập biểu</td>
+                <td colspan="2" style="border: none;">{{{KeToanTruong_CV}}}</td>
+                <td colspan="2" style="border: none;">{{{GiamDoc_CV}}}</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="border: none;"></td>
+                <td colspan="2" style="border: none;"></td>
+                <td colspan="2" style="border: none;"></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="border: none;"></td>
+                <td colspan="2" style="border: none;"></td>
+                <td colspan="2" style="border: none;"></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="border: none;"></td>
+                <td colspan="2" style="border: none;"></td>
+                <td colspan="2" style="border: none;"></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="border: none;">{{{NguoiLap}}}</td>
+                <td colspan="2" style="border: none;">{{{KeToanTruong}}}</td>
+                <td colspan="2" style="border: none;">{{{GiamDoc}}}</td>
+            </tr>
+
+        </tbody>
+    </table>
+</body>
+</html>

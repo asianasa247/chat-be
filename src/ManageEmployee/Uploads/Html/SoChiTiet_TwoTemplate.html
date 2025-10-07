@@ -1,0 +1,182 @@
+<html>
+<head>
+    <style>
+        body{
+            background-color: white;
+        }
+        .txt-left{ 
+            text-align: left; 
+        } 
+        .txt-right{ 
+            text-align: right; 
+        } 
+        .txt-center{ 
+            text-align: center; 
+        }
+        .tbl-style{ 
+            vertical-align: middle;  
+            width: 100%;           
+        }
+        .font-b{
+             font-weight: bold; 
+            }
+        .title-tbl{ 
+            background-color: rgb(252, 213, 180); 
+            font-size: 12px;
+        }
+        table { page-break-inside:avoid } 
+        tr { page-break-inside:avoid; page-break-after:auto } 
+        thead { display:table-header-group } 
+        tfoot { display:table-footer-group }
+        .title-tbl tr th,
+        .tbody-replace tr td{
+            border: 1px solid black;
+            border-top: none;
+            border-right: none;
+        }
+
+        .title-tbl tr:first-child th {
+            border-top: 1px solid black;
+        }
+
+        .title-tbl tr th:last-child,
+        .tbody-replace tr td:last-child{
+            border-right: 1px solid black;
+        }
+
+        .tbody-replace{
+            font-size: 11pt;
+        }
+
+        .tbl-td-diengiai{
+            white-space: initial;
+        }
+
+    </style>
+</head>
+<body>
+    <table class="tbl-style">
+        <tbody style="font-size: 12pt;">
+            <tr class="txt-left">
+                <td colspan="10">{{{TenCongTy}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="10">{{{DiaChi}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="10">{{{MST}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="10"></td>
+            </tr>
+            <tr class="txt-center">
+                <td colspan="10" style="font-weight: bold; font-size: 16pt;">{{{TIEU_DE}}}</td>
+            </tr>
+            <tr class="txt-center">
+                <td colspan="10">Từ tháng {{{TuThang}}} đến {{{DenThang}}} năm {{{Nam}}}</td>
+            </tr>
+            <tr class="txt-center">
+                <td colspan="10">Tài khoản: {{{TaiKhoanAccount}}}</td>
+            </tr>
+            <tr class="txt-center">
+                <td colspan="10">Lũy kế đầu năm:  {{{LUY_KE_DAU_NAM}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="10">Đơn vị tính: Đồng</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="tbl-style" cellspacing="0" cellpadding="7"> 
+        <thead class="font-b txt-center title-tbl" style="font-size: 12pt;">  
+            <tr>
+                <th rowspan="2" colspan="1">NGÀY GHI SỔ</th>
+                <th rowspan="1" colspan="2" >CHỨNG TỪ</th>
+                <th rowspan="2" colspan="1" >DIỄN GIẢI</th>
+                <th rowspan="1" colspan="2" >TK ĐỐI ỨNG</th>
+                <th rowspan="1" colspan="2" >SỐ PHÁT SINH</th>
+                <th rowspan="1" colspan="2" >SỐ DƯ</th>
+            </tr>          
+            <tr>
+                <th rowspan="1" colspan="1" >SỐ</th>
+                <th rowspan="1" colspan="1" style="width: 100px;">NGÀY</th>
+                <th rowspan="1" colspan="1" >TK</th>
+                <th rowspan="1" colspan="1" >CHI TIẾT</th>
+                <th rowspan="1" colspan="1" style="width: 100px;">NỢ</th>
+                <th rowspan="1" colspan="1" style="width: 100px;">CÓ</th>
+                <th rowspan="1" colspan="1" style="width: 100px;">NỢ</th>
+                <th rowspan="1" colspan="1" style="width: 100px;">CÓ</th>
+            </tr>
+        </thead>        
+        <tbody class="tbody-replace">
+            ##REPLACE_PLACE## 
+
+
+            <tr class="font-b" style="display: none;">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="txt-right">{{{TONG_SO_TIEN_PS_NO}}}</td>
+                <td class="txt-right">{{{TONG_SO_TIEN_PS_CO}}}</td>
+                <td class="txt-right">{{{TONG_SO_TIEN_DU_NO}}}</td>
+                <td class="txt-right">{{{TONG_SO_TIEN_DU_CO}}}</td>
+            </tr>    
+            <tr class="font-b" style="display: none;">
+                <td colspan="3"></td>
+                <td>{{{NOTE_LUY_KET_PS}}}</td>
+                <td></td>
+                <td></td>
+                <td class="txt-right">{{{TONG_SO_TIEN_NO_PS}}}</td>
+                <td class="txt-right">{{{TONG_SO_TIEN_CO_PS}}}</td>
+                <td></td>
+                <td></td>
+            </tr>    
+            <tr class="font-b" style="display: none;">
+                <td colspan="3"></td>
+                <td>{{{NOTE_SO_DU_CUOI_THANG}}}</td>
+                <td></td>
+                <td></td>
+                <td class="txt-right">{{{SO_DU_NO}}}</td>
+                <td class="txt-right">{{{SO_DU_CO}}}</td>
+                <td></td>
+                <td></td>
+            </tr>    
+
+            
+
+        </tbody>
+        <tbody class="txt-center">
+            <tr>
+                <td colspan="5"></td>
+                <td colspan="5">Ngày {{{Ngay}}} tháng {{{Thang}}} năm {{{NamSign}}}</td>
+            </tr>
+            <tr class="font-b">
+                <td colspan="3" class="txt-center">Người ghi sổ</td>
+                <td colspan="4" class="txt-center">{{{KeToanTruong_CV}}}</td>
+                <td colspan="3" class="txt-center">{{{GiamDoc_CV}}}</td>
+            </tr>   
+            <tr class="font-b">
+                <td colspan="10"></td>
+            </tr>     
+            <tr class="font-b">
+                <td colspan="10"></td>
+            </tr>     
+            <tr class="font-b">
+                <td colspan="10"></td>
+            </tr>     
+            <tr class="font-b">
+                <td colspan="10"></td>
+            </tr>     
+            <tr class="font-b">
+                <td colspan="3" class="txt-center">{{{NguoiLap}}}</td>
+                <td colspan="4" class="txt-center">{{{KeToanTruong}}}</td>
+                <td colspan="3" class="txt-center">{{{GiamDoc}}}</td>
+            </tr>      
+
+            
+        </tbody>
+    </table>
+</body>
+</html>

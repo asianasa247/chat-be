@@ -1,0 +1,195 @@
+<html>
+
+<head>
+    <style>
+        body {
+            background-color: white;
+        }
+
+        .txt-left {
+            text-align: left;
+        }
+
+        .txt-right {
+            text-align: right;
+        }
+
+        .txt-center {
+            text-align: center;
+        }
+
+        .tbl-style {
+            vertical-align: middle;
+            width: 100%;
+        }
+
+        .font-b {
+            font-weight: bold;
+        }
+
+        .title-tbl {
+            background-color: rgb(252, 213, 180);
+            font-size: 12px;
+        }
+
+        table {
+            page-break-inside: auto
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        thead {
+            display: table-header-group
+        }
+
+        tfoot {
+            display: table-footer-group
+        }
+
+        .title-tbl tr th,
+        .tbody-replace tr td {
+            border: 1px solid black;
+            border-top: none;
+            border-right: none;
+        }
+
+        .title-tbl tr:first-child th {
+            border-top: 1px solid black;
+        }
+
+        .title-tbl tr th:last-child,
+        .tbody-replace tr td:last-child {
+            border-right: 1px solid black;
+        }
+
+        .tbody-replace {
+            font-size: 11pt;
+        }
+
+        .title-helper {
+            display: block;
+            width: 100%;
+            position: relative;
+        }
+
+        .title-helper .head-1 {
+            float: left;
+            text-align: center;
+            width: 100%;
+        }
+
+        .title-helper .head-r-2 {
+            position: absolute;
+            right: 0;
+        }
+
+        .disabled-selection {
+            user-select: none;
+            /* supported by Chrome and Opera */
+            -webkit-user-select: none;
+            /* Safari */
+            -khtml-user-select: none;
+            /* Konqueror HTML */
+            -moz-user-select: none;
+            /* Firefox */
+            -ms-user-select: none;
+            /* Internet Explorer/Edge */
+            color: transparent;
+        }
+
+    </style>
+</head>
+
+<body>
+    <table class="tbl-style">
+        <tbody style="font-size: 12pt;">
+            <tr class="txt-left">
+                <td colspan="6">{{{TenCongTy}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="6">{{{DiaChi}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="6">{{{MST}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="6"></td>
+            </tr>
+            <tr>
+                <td colspan="6" rowspan="1">
+
+                    <div class="title-helper">
+                        <div class="head-1">
+                            <span style="font-weight: bold; font-size: 16pt;">CHỨNG TỪ GHI SỔ</span><br>
+                            <span>Loại chứng từ: {{{LoaiChungTu}}}</span>
+                        </div>
+                        <div class="head-r-2">
+                            <span>Số:<span class="disabled-selection">aa</span> {{{SoCT}}}</span><br>
+                            <span>Ngày: {{{MaxNgay}}}</span>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr class="txt-center" style="display: none;">
+                <td colspan="4" style="font-weight: bold; font-size: 16pt;">CHỨNG TỪ GHI SỔ</td>
+                <td colspan="2" class="txt-left">Số:</td>
+            </tr>
+            <tr class="txt-center" style="display: none;">
+                <td colspan="4" class="txt-center">Loại chứng từ: {{{LoaiChungTu}}}</td>
+                <td colspan="2" class="txt-left">Ngày</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="tbl-style" cellspacing="0" cellpadding="7">
+        <thead class="font-b txt-center title-tbl" style="font-size: 12pt;">
+            <tr>
+                <th rowspan="2" colspan="2">TRÍCH YẾU</th>
+                <th rowspan="1" colspan="2">GHI NỢ</th>
+                <th rowspan="1" colspan="2">GHI CÓ</th>
+            </tr>
+            <tr>
+                <th>TK</th>
+                <th>SỐ TIỀN</th>
+                <th>TK</th>
+                <th>SỐ TIỀN</th>
+            </tr>
+        </thead>
+        <tbody class="tbody-replace">
+            ##REPLACE_PLACE##
+            <tr class="font-b">
+                <td colspan="2" class="txt-center">CỘNG</td>
+                <td>{{{TONG_TK_NO}}}</td>
+                <td class="txt-right">{{{TONG_SOTIEN_NO}}}</td>
+                <td>{{{TONG_TK_CO}}}</td>
+                <td class="txt-right">{{{TONG_SOTIEN_CO}}}</td>
+            </tr>
+        </tbody>
+        <tbody class="txt-center">
+            <tr>
+                <td colspan="6" class="txt-left">Kèm theo 10 chứng từ</td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="3">Ngày {{{Ngay}}} tháng {{{Thang}}} năm {{{Nam}}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="width: 50%;">Người lập phiếu</td>
+                <td colspan="3">{{{KeToanTruong_CV}}}</td>
+            </tr>
+            <tr>
+                <td colspan="6" rowspan="1"></td>
+            </tr>
+            <tr>
+                <td colspan="3">{{{NguoiLap}}}</td>
+                <td colspan="3">{{{KeToanTruong}}}</td>
+            </tr>
+
+        </tbody>
+    </table>
+</body>
+
+</html>

@@ -1,0 +1,268 @@
+<html>
+<head>
+    <style>
+        body{
+            background-color: white;
+            page-break-inside:avoid;
+            page-break-after: auto
+
+        }
+        .txt-left{
+            text-align: left;
+        }
+        .txt-right{
+            text-align: right;
+        }
+        .txt-center{
+            text-align: center;
+        }
+        .tbl-style{
+            vertical-align: middle;
+            width: 100%;
+        }
+        .font-b{
+            font-weight: bold;
+        }
+        .title-tbl{
+            font-size: 12px;
+        }
+        table { page-break-inside:auto }
+        tr { page-break-inside:avoid; page-break-after:auto }
+        thead { display:table-header-group }
+        tfoot { display:table-footer-group }
+        .title-tbl tr th,
+        .tbody-replace tr td{
+            border: 1px solid black;
+            border-top: none;
+            border-right: none;
+        }
+
+        .title-tbl tr:first-child th {
+            border-top: 1px solid black;
+        }
+
+        .title-tbl tr th:last-child,
+        .tbody-replace tr td:last-child{
+            border-right: 1px solid black;
+        }
+
+        .tbody-replace{
+            font-size: 11pt;
+        }
+
+        .tbl-td-diengiai{
+            white-space: initial;
+        }
+
+    </style>
+</head>
+<body>
+    <section class="company">
+        <img src="{{{CompanyImage}}}" height="200" width="200" alt="LoGo" />
+        <div id="company-info">
+            <h3>{{{CompanyName}}}</h3>
+            <p>
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.0" id="Layer_1" width="15px" height="15px" viewBox="0 0 64 64" enable-background="new 0 0 64 64" xml:space="preserve">
+                <path fill="#231F20" d="M32,0C18.746,0,8,10.746,8,24c0,5.219,1.711,10.008,4.555,13.93c0.051,0.094,0.059,0.199,0.117,0.289l16,24  C29.414,63.332,30.664,64,32,64s2.586-0.668,3.328-1.781l16-24c0.059-0.09,0.066-0.195,0.117-0.289C54.289,34.008,56,29.219,56,24  C56,10.746,45.254,0,32,0z M32,32c-4.418,0-8-3.582-8-8s3.582-8,8-8s8,3.582,8,8S36.418,32,32,32z" />
+                </svg>
+                {{{CompanyAddress}}}
+            </p>
+            <p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 24 24" fill="none">
+                    <rect width="24" height="24" fill="white" />
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2.14089 4.4021C2.34025 2.92963 3.63956 2 4.99004 2H7.55848C8.84977 2 9.99619 2.82629 10.4045 4.05132L11.454 7.19963C11.905 8.55283 11.1086 10.0036 9.72482 10.3496C9.38646 10.4342 9.26975 10.8555 9.51637 11.1022L12.8978 14.4836C13.1445 14.7303 13.5658 14.6135 13.6504 14.2752C13.9964 12.8914 15.4472 12.095 16.8004 12.546L19.9487 13.5955C21.1737 14.0038 22 15.1502 22 16.4415V19.01C22 20.3604 21.0704 21.6598 19.5979 21.8591C18.9114 21.9521 18.211 22 17.5 22C8.93959 22 2 15.0604 2 6.5C2 5.78898 2.04794 5.08863 2.14089 4.4021Z" fill="#323232" />
+                </svg>
+                Mã số thuế: {{{MST}}} - Số điện thoại: {{{Phone}}}
+            </p>
+            <p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="15px" height="15px" viewBox="0 0 24 24" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M2.02783 11.25C2.41136 6.07745 6.72957 2 12.0001 2C11.1693 2 10.4295 2.36421 9.82093 2.92113C9.21541 3.47525 8.70371 4.24878 8.28983 5.16315C7.87352 6.08292 7.55013 7.15868 7.33126 8.32611C7.1558 9.26194 7.04903 10.2485 7.01344 11.25H2.02783ZM2.02783 12.75H7.01344C7.04903 13.7515 7.1558 14.7381 7.33126 15.6739C7.55013 16.8413 7.87351 17.9171 8.28983 18.8368C8.70371 19.7512 9.21541 20.5247 9.82093 21.0789C10.4295 21.6358 11.1693 22 12.0001 22C6.72957 22 2.41136 17.9226 2.02783 12.75Z" fill="#1C274C" />
+                    <path d="M12.0001 3.39535C11.7251 3.39535 11.3699 3.51236 10.9567 3.89042C10.5406 4.27126 10.1239 4.86815 9.75585 5.68137C9.3902 6.4892 9.09329 7.46441 8.88897 8.55419C8.72806 9.41242 8.62824 10.3222 8.59321 11.25H15.4071C15.372 10.3222 15.2722 9.41242 15.1113 8.5542C14.907 7.46441 14.6101 6.48921 14.2444 5.68137C13.8763 4.86815 13.4597 4.27126 13.0435 3.89042C12.6304 3.51236 12.2751 3.39535 12.0001 3.39535Z" fill="#1C274C" />
+                    <path d="M8.88897 15.4458C9.09329 16.5356 9.3902 17.5108 9.75585 18.3186C10.1239 19.1319 10.5406 19.7287 10.9567 20.1096C11.3698 20.4876 11.7251 20.6047 12.0001 20.6047C12.2751 20.6047 12.6304 20.4876 13.0435 20.1096C13.4597 19.7287 13.8763 19.1319 14.2444 18.3186C14.6101 17.5108 14.907 16.5356 15.1113 15.4458C15.2722 14.5876 15.372 13.6778 15.4071 12.75H8.59321C8.62824 13.6778 8.72806 14.5876 8.88897 15.4458Z" fill="#1C274C" />
+                    <path d="M12.0001 2C12.831 2 13.5708 2.36421 14.1793 2.92113C14.7849 3.47525 15.2966 4.24878 15.7104 5.16315C16.1267 6.08292 16.4501 7.15868 16.669 8.32612C16.8445 9.26194 16.9512 10.2485 16.9868 11.25H21.9724C21.5889 6.07745 17.2707 2 12.0001 2Z" fill="#1C274C" />
+                    <path d="M16.669 15.6739C16.4501 16.8413 16.1267 17.9171 15.7104 18.8368C15.2966 19.7512 14.7849 20.5247 14.1793 21.0789C13.5708 21.6358 12.831 22 12.0001 22C17.2707 22 21.5889 17.9226 21.9724 12.75H16.9868C16.9512 13.7515 16.8445 14.7381 16.669 15.6739Z" fill="#1C274C" />
+                </svg>
+                {{{WebsiteName}}}
+            </p>
+            <p>
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns" width="15px" height="15px" viewBox="0 -3.5 32 32" version="1.1">
+
+                    <title>Kế hoạch nhập xuất</title>
+                    <desc>Created with Sketch Beta.</desc>
+                    <defs>
+
+                    </defs>
+                    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+                        <g id="Icon-Set-Filled" sketch:type="MSLayerGroup" transform="translate(-414.000000, -261.000000)" fill="#000000">
+                            <path d="M430,275.916 L426.684,273.167 L415.115,285.01 L444.591,285.01 L433.235,273.147 L430,275.916 L430,275.916 Z M434.89,271.89 L445.892,283.329 C445.955,283.107 446,282.877 446,282.634 L446,262.862 L434.89,271.89 L434.89,271.89 Z M414,262.816 L414,282.634 C414,282.877 414.045,283.107 414.108,283.329 L425.147,271.927 L414,262.816 L414,262.816 Z M445,261 L415,261 L430,273.019 L445,261 L445,261 Z" id="mail" sketch:type="MSShapeGroup">
+
+                            </path>
+                        </g>
+                    </g>
+                </svg>
+                {{{Email}}}
+            </p>
+        </div>
+    </section>
+
+    <section class="title">
+        <div class="title-left">
+            <h1>KẾ HOẠCH NHẬP XUẤT HÀNG</h1>
+            <p style="text-align: center;">Số: {{{ProduceCode}}}</p>
+            <p style="text-align: center;">Ghi chú: {{{ProduceNote}}}</p>
+        </div>
+    </section>
+
+    <table class="tbl-style" cellspacing="0" cellpadding="7">
+        <thead class="font-b txt-center title-tbl" style="font-size: 12pt;">
+            <tr>
+                <th>STT</th>
+                <th>Tên sản phẩm</th>
+                <th>Diễn giải</th>
+                <th>ĐVT</th>
+                <th>SL tấn</th>
+                <th>SL bao</th>
+                <th>Ghi chú</th>
+            </tr>
+        </thead>
+        <tbody class="tbody-replace">
+            ##REPLACE_PLACE##
+        </tbody>
+    </table>
+
+    <section>
+        <p class="date-item">Ngày {{{Day}}} tháng {{{Month}}} năm {{{Year}}}</p>
+    </section>
+
+    <section class="signature">
+        ##SIGN_REPLACE_PLACE##
+    </section>
+    <style>
+        body * {
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .company {
+            display: -webkit-box;
+            -webkit-box-pack: start;
+            padding: 10px;
+            margin-right: 100px;
+        }
+
+            .company img {
+                height: 150px;
+                width: 150px;
+                margin-right: 100px;
+            }
+
+        #company-info h3 {
+            margin: 0;
+            text-transform: uppercase;
+            color: #47B0C5;
+            font-weight: bold;
+            text-shadow: 1px 0 #47B0C5;
+            font-size: 20px;
+        }
+
+        #company-info p svg {
+            margin-right: 5px;
+        }
+
+        #company-info p, #customer p {
+            margin: 0;
+            margin-top: 10px;
+            color: #65605F;
+            font-size: 15px;
+            font-style: italic;
+        }
+
+        .title {
+            margin-top: 10px;
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-align: stretch;
+            -moz-box-align: stretch;
+            -ms-flex-align: stretch;
+            -webkit-align-items: stretch;
+            align-items: stretch;
+        }
+
+            .title * {
+                padding: 0;
+                margin: 5px;
+            }
+
+        .title-left {
+            font-weight: bold;
+            -webkit-box-flex: 9;
+            -moz-box-flex: 9;
+            -ms-flex: 9;
+            -webkit-flex-grow: 9;
+            flex-grow: 9;
+        }
+
+        .title-right {
+            -webkit-box-flex: 1;
+            -moz-box-flex: 1;
+            -ms-flex: 1;
+            -webkit-flex-grow: 1;
+            flex-grow: 1;
+        }
+
+        .title-left h1 {
+            text-align: center;
+        }
+
+        .main p {
+            margin: 0;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        .note {
+            margin-top: 20px !important;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        .signature {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: justify;
+            -moz-box-pack: justify;
+            -ms-flex-pack: justify;
+            -webkit-justify-content: space-around;
+            justify-content: space-around;
+        }
+
+        .signature-item {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .signature-item-signer {
+            font-weight: bold;
+            padding: 0;
+            margin: 0;
+        }
+
+        .signature-item-note {
+            font-style: italic;
+            font-size: 13px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .date-item {
+            text-align: right;
+            margin-top: 15px;
+        }
+    </style>
+</body>
+</html>

@@ -1,0 +1,412 @@
+{
+  "HSoKhaiThue": {
+    "TTinChung": {
+      "TTinDVu": {
+        "maDVu": "MISA SME2022",
+        "tenDVu": "MISA SME 2022",
+        "pbanDVu": "16.0.0.8",
+        "ttinNhaCCapDVu": "Công ty Cổ phẩn MISA JSC"
+      },
+      "TTinTKhaiThue": {
+        "TKhaiThue": {
+          "maTKhai": 842,
+          "tenTKhai": "TỜ KHAI THUẾ GIÁ TRỊ GIA TĂNG (MẫU SỐ 01/GTGT)",
+          "moTaBMau": "",
+          "pbanTKhaiXML": "2.5.1",
+          "loaiTKhai": "C",
+          "soLan": 0,
+          "KyKKhaiThue": {
+            "kieuKy": "M",
+            "kyKKhai": "07/2022",
+            "kyKKhaiTuNgay": "01/07/2022",
+            "kyKKhaiDenNgay": "31/07/2022",
+            "kyKKhaiTuThang": "",
+            "kyKKhaiDenThang": ""
+          },
+          "maCQTNoiNop": 71701,
+          "tenCQTNoiNop": "Thành phố Vũng Tàu - Chi cục Thuế khu vực Vũng Tàu - Côn Đảo",
+          "ngayLapTKhai": "2022-08-15",
+          "GiaHan": {
+            "maLyDoGiaHan": "",
+            "lyDoGiaHan": ""
+          },
+          "nguoiKy": "Đỗ Văn Nghĩa",
+          "ngayKy": "2022-08-15",
+          "nganhNgheKD": ""
+        },
+        "NNT": {
+          "mst": 3502324074,
+          "tenNNT": "CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ HƯƠNG THỊNH PHÁT",
+          "dchiNNT": "69 Xô Viết Nghệ Tĩnh, Phường Thắng Tam, Thành Phố Vũng Tàu, Tỉnh Bà Rịa - Vũng Tàu, Việt Nam",
+          "phuongXa": "",
+          "maHuyenNNT": "Tp. Vũng Tàu",
+          "tenHuyenNNT": "Tp. Vũng Tàu",
+          "maTinhNNT": "Bà Rịa - Vũng Tàu",
+          "tenTinhNNT": "Bà Rịa - Vũng Tàu",
+          "dthoaiNNT": "",
+          "faxNNT": "",
+          "emailNNT": ""
+        }
+      }
+    },
+    "CTieuTKhaiChinh": {
+      "ma_NganhNghe": 0,
+      "ten_NganhNghe": "Hoạt động sản xuất kinh doanh thông thường",
+      "tieuMucHachToan": 1701,
+      "Header": {
+        "ct09": "",
+        "ct10": "",
+        "DiaChiHDSXKDKhacTinhNDTSC": {
+          "ct11a_phuongXa_ma": "",
+          "ct11a_phuongXa_ten": "",
+          "ct11b_quanHuyen_ma": "",
+          "ct11b_quanHuyen_ten": "",
+          "ct11c_tinhTP_ma": "",
+          "ct11c_tinhTP_ten": ""
+        }
+      },
+      "ct21": 0,
+      "ct22": 749937629,
+      "GiaTriVaThueGTGTHHDVMuaVao": {
+        "ct23": 3897097540,
+        "ct24": 389668198
+      },
+      "HangHoaDichVuNhapKhau": {
+        "ct23a": 0,
+        "ct24a": 0
+      },
+      "ct25": 389668198,
+      "ct26": 0,
+      "HHDVBRaChiuThueGTGT": {
+        "ct27": 3994375653,
+        "ct28": 379049866
+      },
+      "ct29": 0,
+      "HHDVBRaChiuTSuat5": {
+        "ct30": 0,
+        "ct31": 0
+      },
+      "HHDVBRaChiuTSuat10": {
+        "ct32": 3994375653,
+        "ct33": 379049866
+      },
+      "ct32a": 0,
+      "TongDThuVaThueGTGTHHDVBRa": {
+        "ct34": 3994375653,
+        "ct35": 379049866
+      },
+      "ct36": -10618332,
+      "ct37": 0,
+      "ct38": 0,
+      "ct39a": 0,
+      "ct40a": 0,
+      "ct40b": 0,
+      "ct40": 0,
+      "ct41": 760555961,
+      "ct42": 0,
+      "ct43": 760555961
+    },
+    "PLuc": {
+      "PL_NQ43_GTGT": {
+        "BangKeTenHHDV": [
+          {
+            "tenHHDV": "+ 7up Chai nhựa 1500x12",
+            "giaTriHHDV": 32890000,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 657800
+          },
+          {
+            "tenHHDV": "+ 7up Chai nhựa 390x24",
+            "giaTriHHDV": 39103560,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 782071
+          },
+          {
+            "tenHHDV": "+ 7up Chai thủy tinh 285x24",
+            "giaTriHHDV": 3394620,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 67892
+          },
+          {
+            "tenHHDV": "+ 7Up Free Fiber Lon 320x24 Lốc",
+            "giaTriHHDV": 34200000,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 684000
+          },
+          {
+            "tenHHDV": "+ 7up Lon 320x24",
+            "giaTriHHDV": 43778560,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 875571
+          },
+          {
+            "tenHHDV": "+ Aquafina Chai  nhựa 355x24",
+            "giaTriHHDV": 85400000,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 1708000
+          },
+          {
+            "tenHHDV": "+ Aquafina Chai nhựa 1500x12",
+            "giaTriHHDV": 78229206,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 1564584
+          },
+          {
+            "tenHHDV": "+ Aquafina chai Nhựa 500 x 24",
+            "giaTriHHDV": 105420000,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 2108400
+          },
+          {
+            "tenHHDV": "+ Aquafina chai nhựa 5000x4",
+            "giaTriHHDV": 11031900,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 220638
+          },
+          {
+            "tenHHDV": "+ Aquafina Chai nhựa 500x28",
+            "giaTriHHDV": 13704075,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 274082
+          },
+          {
+            "tenHHDV": "+ Evervess Soda Lon 330x24",
+            "giaTriHHDV": 314142,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 6283
+          },
+          {
+            "tenHHDV": "+ Mirida Xá xị Chai nhựa 1500x12",
+            "giaTriHHDV": 18535148,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 370703
+          },
+          {
+            "tenHHDV": "+ Mirinda Cam chai nhựa 1500x12",
+            "giaTriHHDV": 10472000,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 209440
+          },
+          {
+            "tenHHDV": "+ Mirinda Cam chai nhựa 390x24",
+            "giaTriHHDV": 7833600,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 156672
+          },
+          {
+            "tenHHDV": "+ Mirinda Soda kem chai nhựa 390x24",
+            "giaTriHHDV": 21185640,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 423713
+          },
+          {
+            "tenHHDV": "+ Mirinda Soda kem lon 320x24",
+            "giaTriHHDV": 23400000,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 468000
+          },
+          {
+            "tenHHDV": "+ Mirinda Xá xị chai nhựa 390x24",
+            "giaTriHHDV": 8051200,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 161024
+          },
+          {
+            "tenHHDV": "+ Mirinda Xá xị Chai thủy tinh 300x24",
+            "giaTriHHDV": 809055,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 16181
+          },
+          {
+            "tenHHDV": "+ Pepsi  Lon 320x24",
+            "giaTriHHDV": 5425481,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 108510
+          },
+          {
+            "tenHHDV": "+ Pepsi Chai nhựa 1500x12",
+            "giaTriHHDV": 7480000,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 149600
+          },
+          {
+            "tenHHDV": "+ Pepsi Chai nhựa 390x24",
+            "giaTriHHDV": 29915875,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 598318
+          },
+          {
+            "tenHHDV": "+ Pepsi Chai thủy tinh 300x24",
+            "giaTriHHDV": 7238660,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 144773
+          },
+          {
+            "tenHHDV": "+ Revise Chai nhựa 500x24",
+            "giaTriHHDV": 38515662,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 770313
+          },
+          {
+            "tenHHDV": "+ Revise Chanh muối chai nhựa 390x24",
+            "giaTriHHDV": 35208272,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 704165
+          },
+          {
+            "tenHHDV": "+ Sting Cà phê chai nhựa 330x24",
+            "giaTriHHDV": 5292400,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 105848
+          },
+          {
+            "tenHHDV": "+ Sting Dâu đỏ  Lon 320x24",
+            "giaTriHHDV": 28857618,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 577152
+          },
+          {
+            "tenHHDV": "+ Sting Dâu tây đỏ chai nhựa 330x24",
+            "giaTriHHDV": 118419289,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 2368386
+          },
+          {
+            "tenHHDV": "+ Sting Dâu tây đỏ chai thủy tinh 240x24",
+            "giaTriHHDV": 14044800,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 280896
+          },
+          {
+            "tenHHDV": "+ Sting Vàng Chai nhựa 330x24",
+            "giaTriHHDV": 25108684,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 502174
+          },
+          {
+            "tenHHDV": "+ Tea+ Trà Ô long chai nhựa 350x24",
+            "giaTriHHDV": 20424780,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 408496
+          },
+          {
+            "tenHHDV": "+ Tea+ Trà Ô long chai nhựa 455x24",
+            "giaTriHHDV": 119946700,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 2398934
+          },
+          {
+            "tenHHDV": "+ Tea+ Trà Ô long chanh chai nhựa 455x24",
+            "giaTriHHDV": 8161470,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 163229
+          },
+          {
+            "tenHHDV": "+ Twister Cam chai nhựa 455x24",
+            "giaTriHHDV": 10308000,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 206160
+          },
+          {
+            "tenHHDV": "7Up Lon 320 x 24 tray lốc 6 - Summer",
+            "giaTriHHDV": 13940000,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 278800
+          },
+          {
+            "tenHHDV": "Chi Phí Bán hàng đạt sản lượng tháng và quý 2/2022",
+            "giaTriHHDV": 41330208,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 826604
+          },
+          {
+            "tenHHDV": "Chi phí đổi thưởng cho NPP C1 chương trình \"Thưởng vị thăng hoa, đón xế sang về nhà\"",
+            "giaTriHHDV": 16785000,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 335700
+          },
+          {
+            "tenHHDV": "Hỗ Trợ chương Trình khuyến mãi cho chi nhánh công ty Pepsico  Việt Nam Tại Đồng Nai giai đoạn từ ngày10/05/2022 đến 31/05/2022",
+            "giaTriHHDV": 247664,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 4953
+          },
+          {
+            "tenHHDV": "Nhận tiền chi phí hao bể bao bì quý 1 và quý 2 năm 2022",
+            "giaTriHHDV": 2476100,
+            "thueSuatTheoQuyDinh": 10,
+            "thueSuatSauGiam": 8,
+            "thueGTGTDuocGiam": 49522
+          }
+        ],
+        "tongCongGiaTriHHDV": 1086879369,
+        "tongCongThueGTGTDuocGiam": 21737587
+      }
+    }
+  },
+  "CKyDTu": {
+    "Signature": {
+      "SignedInfo": {
+        "CanonicalizationMethod": "",
+        "SignatureMethod": "",
+        "Reference": {
+          "Transforms": {
+            "Transform": ""
+          },
+          "DigestMethod": "",
+          "DigestValue": "hgSBDLoEYrvDjbbi5PncqZKZ4+Y="
+        }
+      },
+      "SignatureValue": "qLUbMBP4c3JtqIod5hZlov3zKh2oLuXAAVJa3uJJKkyJ3hoqNQvuW4YguAjXDjTTGWfje0GrQjJx\nmGIntV6fZmmuYHw1lULuVEgAndd/LM3CZopE/PZllVn6lXTn8cTSOtY55LDZeItz3QHmckaGEwZo\nNWu9pJrSFZCafyEtYv4=",
+      "KeyInfo": {
+        "KeyValue": {
+          "RSAKeyValue": {
+            "Modulus": "485SypdRtehfUxD3WBuaBO+TrZbTAZN45cKyLw75WAEfyGKPAXg+KrY7pVo9WOHvUS9aLPVua8wl\n0ELvN2bO35Xr2qqggg9CSqq+zBnPMGY/ncTLTlz/AfDm06Nk2n8fDZYgp4C8gPjtTtEwTmMPx5TC\ndbbdsfNaJI+INfCVHts=",
+            "Exponent": "AQAB"
+          }
+        },
+        "X509Data": {
+          "X509SubjectName": "UID=MST:3502324074,CN=CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ HƯƠNG THỊNH PHÁT,L=Thành Phố Vũng Tàu,ST=Bà Rịa-Vũng Tàu,C=VN",
+          "X509Certificate": "MIIF3jCCA8agAwIBAgIQVAEBAdPYgmX4voKcKqc6JzANBgkqhkiG9w0BAQUFADBpMQswCQYDVQQG\nEwJWTjETMBEGA1UEChMKVk5QVCBHcm91cDEeMBwGA1UECxMVVk5QVC1DQSBUcnVzdCBOZXR3b3Jr\nMSUwIwYDVQQDExxWTlBUIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MB4XDTE5MTIxNjEzNTgwMFoX\nDTI0MDYyNjA4MDIwMFowgbcxCzAJBgNVBAYTAlZOMR0wGwYDVQQIDBRCw6AgUuG7i2EtVsWpbmcg\nVMOgdTEgMB4GA1UEBwwXVGjDoG5oIFBo4buRIFbFqW5nIFTDoHUxRzBFBgNVBAMMPkPDlE5HIFRZ\nIFROSEggVEjGr8agTkcgTeG6oEkgROG7ikNIIFbhu6QgSMavxqBORyBUSOG7ik5IIFBIw4FUMR4w\nHAYKCZImiZPyLGQBAQwOTVNUOjM1MDIzMjQwNzQwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGB\nAOPOUsqXUbXoX1MQ91gbmgTvk62W0wGTeOXCsi8O+VgBH8hijwF4Piq2O6VaPVjh71EvWiz1bmvM\nJdBC7zdmzt+V69qqoIIPQkqqvswZzzBmP53Ey05c/wHw5tOjZNp/Hw2WIKeAvID47U7RME5jD8eU\nwnW23bHzWiSPiDXwlR7bAgMBAAGjggG1MIIBsTBwBggrBgEFBQcBAQRkMGIwMgYIKwYBBQUHMAKG\nJmh0dHA6Ly9wdWIudm5wdC1jYS52bi9jZXJ0cy92bnB0Y2EuY2VyMCwGCCsGAQUFBzABhiBodHRw\nOi8vb2NzcC52bnB0LWNhLnZuL3Jlc3BvbmRlcjAdBgNVHQ4EFgQUqBvpK0sv6cDfegj0dA4nrtRu\nOngwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBQGacDV1QKKFY1Gfel84mgKVaxqrzBoBgNVHSAE\nYTBfMF0GDisGAQQBge0DAQEDAQEBMEswIgYIKwYBBQUHAgIwFh4UAE8ASQBEAC0AUwBUAC0AMQAu\nADAwJQYIKwYBBQUHAgEWGWh0dHA6Ly9wdWIudm5wdC1jYS52bi9ycGEwMQYDVR0fBCowKDAmoCSg\nIoYgaHR0cDovL2NybC52bnB0LWNhLnZuL3ZucHRjYS5jcmwwDgYDVR0PAQH/BAQDAgTwMCAGA1Ud\nJQQZMBcGCisGAQQBgjcKAwwGCSqGSIb3LwEBBTAgBgNVHREEGTAXgRV0cm9uZ2RkLnZ0dUBnbWFp\nbC5jb20wDQYJKoZIhvcNAQEFBQADggIBAChbIS0pD+4AmKFgFCLU66XvVWPAsMrKSE96q8Mk/3AZ\nNgBOR82mE6q1zYBTdBgVYJJRAnk22eRbDfX6ARH8+/i8ZbO/7vvwiG7d78oX6GWYpyhyRqcTcGA7\nlkmk8XLDwxWX1ULJ+EuR9g/nSHzP03HCdboGE6GfAj7G4v7pc49ExxObbgN/ZkVUP2eNfpJUijxM\noKt7EbODqih7RyPum4U66ynmjtbBpaAZCQJ1f603Q36itPq4aNt4fJ9yhWEnK+o6l2/zn1e7Bxg/\nB0HrSbQQDR6vC7tEjsd+p6KmnNFGuwvIebRsk2nn93QUo2hNcRnoERUcm8tqBj/VOQOqs8JieZ59\nAqaxNe4XTc8j6vQClbA2gdyAHmiGyfaxQdBSrzsArt9FAb0cCFryvDgBAtzf8R2xfhFJ7WgYqNiD\nJTfOqIEnf+wfYUJt1pdo0VCda8APoHLWbCPprHEs9jneGHp1bOzYzUxcYEPDNTkqCSzipHfYgPNC\nPwwM+3ddxVdpHqDhft1Hx0a6sFisK2P+5RnchdLXDgtOHx1UXpJoZdawSB6EDgPCZRqxLKD/cDkr\n7p6B1urbUnB93615G4R3qlFm43VIvFp6U6fVdAdE4ycPKaoijenP5Lq8HUMZ0n2pQ4p12J4hnlpo\nxV+F2UNNOHSvuNqD+xciTYHRuCLb83Db"
+        }
+      }
+    }
+  }
+}

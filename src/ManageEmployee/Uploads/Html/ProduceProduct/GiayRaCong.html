@@ -1,0 +1,107 @@
+<html>
+<head>
+</head>
+<body>
+    <section class="company">
+        <img src="{{{CompanyImage}}}" height="200" width="200" alt="LoGo" />
+        <div id="company-info">
+            <h3>{{{CompanyName}}}</h3>
+            <p>Mã số thuế: {{{MST}}} - Số điện thoại: {{{Phone}}}</p>
+            <p>{{{CompanyAddress}}}</p>
+        </div>
+    </section>
+
+    <h1 id="title"> GIẤY RA CỔNG </h1>
+    <h3>Số văn bản: {{{ProduceCode}}}</h3>
+
+    <section class="main">
+        <p><strong>Cho phép ra cổng: </strong>{{{Local}}}</p>
+        <p><strong>Thời gian: </strong><strong>ngày</strong> {{{Day}}} <strong>tháng</strong> {{{Month}}} <strong>năm</strong> {{{Year}}}</p>
+        <p><strong>Số xe: </strong> {{{CarName}}}</p>
+        <p><strong>Lí do: </strong>{{{Note}}}</p>
+        <p class="note">Bảo vệ lưu ý: Kiểm tra nội dung trên trước khi cho phép ra cổng.</p>
+    </section>
+
+    <section class="signature">
+        ##SIGN_REPLACE_PLACE##
+    </section>
+
+
+    <style>
+        body * {
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .company {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: start;
+            -moz-box-pack: justify;
+            -ms-flex-pack: justify;
+            padding: 10px;
+            font-size: 14px;
+            -webkit-box-align: center;
+        }
+
+            .company img {
+                height: 100px;
+                width: 100px;
+                margin-right: 40px;
+            }
+
+        #company-info h3 {
+            margin: 0;
+            text-transform: uppercase;
+            text-align: left !important;
+        }
+
+        #company-info p {
+            margin: 0;
+            margin-top: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        h3 {
+            text-align: center;
+            font-size: 14px;
+            color: #65605F;
+            font-weight: bold !important;
+        }
+        .main p {
+            margin: 0;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        .note {
+            margin-top: 20px !important;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        .signature {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: end;
+            -moz-box-pack: end;
+            -ms-flex-pack: end;
+            -webkit-justify-content: flex-end;
+            justify-content: flex-end;
+        }
+
+        .signature-item {
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</body>
+</html>

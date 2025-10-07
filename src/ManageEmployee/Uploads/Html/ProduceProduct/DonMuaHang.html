@@ -1,0 +1,249 @@
+<html>
+<head>
+    <style>
+        body{
+            background-color: white;
+        }
+        .txt-left{
+            text-align: left;
+        }
+        .txt-right{
+            text-align: right;
+        }
+        .txt-center{
+            text-align: center;
+        }
+        .tbl-style{
+            vertical-align: middle;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .font-b{
+            font-weight: bold;
+        }
+        .title-tbl{
+            font-size: 12px;
+        }
+        table { page-break-inside:auto }
+        tr { page-break-inside:avoid; page-break-after:auto }
+        thead { display:table-header-group }
+        tfoot { display:table-footer-group }
+        .title-tbl tr th,
+        .tbody-replace tr td{
+            border: 1px solid black;
+            border-top: none;
+            border-right: none;
+        }
+
+        .title-tbl tr:first-child th {
+            border-top: 1px solid black;
+        }
+
+        .title-tbl tr th:last-child,
+        .tbody-replace tr td:last-child{
+            border-right: 1px solid black;
+        }
+
+        .tbody-replace{
+            font-size: 11pt;
+        }
+
+        .tbl-td-diengiai{
+            white-space: initial;
+        }
+
+    </style>
+</head>
+<body>
+    <section class="company">
+        <img src="{{{CompanyImage}}}" height="200" width="200" alt="LoGo" />
+        <div id="company-info">
+            <h3>{{{CompanyName}}}</h3>
+            <p>Mã số thuế: {{{MST}}} - Số điện thoại: {{{Phone}}}</p>
+            <p>{{{CompanyAddress}}}</p>
+        </div>
+    </section>
+
+    <section class="title">
+        <h1>ĐƠN MUA HÀNG</h1>
+    </section>
+
+    <table class="tbl-style">
+        <tbody style="font-size: 12pt;">
+            <tr class="txt-left font-b">
+                <td>Tên nhà cung cấp: {{{CustomerName}}}</td>
+                <td>Ngày: {{{DateProduce}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td>Địa chỉ: {{{CustomerAddress}}}</td>
+                <td>Số: {{{ProduceCode}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td>Mã số thuế:  {{{CustomerTax}}}</td>
+                <td>Loại tiền:</td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="2">Điện thoại:  {{{CustomerPhone}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="2">Diễn giải: {{{Note}}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="tbl-style" cellspacing="0" cellpadding="7">
+        <colgroup>
+            <col style="max-width: fit-content; text-align: left;">
+            <col style="width: auto; text-wrap: nowrap; text-align: left;">
+            <col style="max-width: fit-content">
+            <col style="max-width: fit-content">
+            <col style="max-width: fit-content">
+            <col style="max-width: fit-content">
+        </colgroup>
+        <thead class="font-b txt-center title-tbl" style="font-size: 12pt;">
+            <tr>
+                <th>Mã hàng</th>
+                <th>Diễn giải</th>
+                <th>Đơn vị</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody class="tbody-replace">
+            ##REPLACE_PLACE##
+        </tbody>
+        <tfoot class="tbody-replace">
+            <tr class="font-b">
+                <td colspan="3"></td>
+                <td colspan="2">Cộng tiền hàng:</td>
+                <td class="txt-right">{{{TotalAmount}}}</td>
+            </tr>
+            <tr class="font-b">
+                <td colspan="3">Thuế suất GTGT: X</td>
+                <td colspan="3">Tiền thuế GTGT: X</td>
+            </tr>
+            <tr class="font-b">
+                <td colspan="3"></td>
+                <td colspan="3">Tổng tiền thanh toán:{{{TotalAmount}}}</td>
+            </tr>
+            <tr class="font-b">
+                <td colspan="6">Số tiền viết bằng chữ: {{{TotalAmountText}}}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <table class="tbl-style">
+        <tbody style="font-size: 12pt;">
+            <tr class="txt-left font-b">
+                <td>Ngày giao hàng: </td>
+            </tr>
+            <tr class="txt-left">
+                <td>Địa điểm giao hàng: </td>
+            </tr>
+            <tr class="txt-left">
+                <td>Điều khoản thanh toán: </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <section>
+        <table class="table-signature">
+            <tr style="background-color: #fff;">
+                <td class='td-no-border'>
+                    <div class='signature-item'>
+                        <p class='signature-item-signer'>Nhà cung cấp xác nhận</p>
+                        <p class='signature-item-note'>(Ký, họ tên)</p><br />
+                        <img src='http://127.0.0.1:5191/Uploads\Images\7cb817f6-c4a3-40ad-b1a4-2f4b1fc75121.png' height='100' width='100' /><br />
+                        <p class='signature-item-signer'>  </p><br />
+                    </div>
+                </td>
+                ##SIGN_REPLACE_PLACE##
+            </tr>
+        </table>
+    </section>
+
+
+    <style>
+        body * {
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .table-signature {
+            width: 100%;
+            border-collapse: collapse;
+            border: none;
+        }
+
+        .company {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: start;
+            -moz-box-pack: justify;
+            -ms-flex-pack: justify;
+            -webkit-box-orient: horizontal;
+            -webkit-box-align: center;
+            justify-content: start;
+            align-items: center;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .company img {
+            height: 100px;
+            width: 100px;
+            margin-right: 40px;
+        }
+
+        #company-info h3 {
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        #company-info p {
+            margin: 0;
+            margin-top: 10px;
+        }
+
+        .title {
+            font-weight: bold;
+        }
+
+            .title h1 {
+                text-align: center;
+            }
+
+        .main p {
+            margin: 0;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        .note {
+            margin-top: 20px !important;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        .signature {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: justify;
+            -moz-box-pack: justify;
+            -ms-flex-pack: justify;
+            -webkit-justify-content: space-around;
+            justify-content: space-around;
+        }
+
+        .signature-item {
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</body>
+</html>

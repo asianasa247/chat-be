@@ -1,0 +1,618 @@
+<html>
+<head>
+    <style>
+        body {
+            padding: 0rem 1rem;
+            font-family: Tahoma, Arial, Helvetica, sans-serif;
+        }
+
+        .a5-horizontal {
+            width: 21cm;
+            height: 13cm;
+            margin: 0;
+            padding-top: 20px;
+        }
+
+        .inright {
+            font-size: 11px;
+            font-weight: normal !important;
+            text-align: center;
+            padding: 5px 0px;
+        }
+
+        .inright:before {
+            content: '';
+            position: absolute;
+            border-bottom: 1px dotted #151515d6;
+            width: 100px;
+            margin-top: 11px;
+            margin-left: -25px;
+        }
+
+        .head {
+            margin-left: 20px;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+        }
+
+        .head_left {
+            -webkit-box-pack: start;
+            -webkit-justify-content: flex-start;
+            justify-content: flex-start;
+            width: 80%;
+            margin-left: 25px;
+        }
+
+        .head_left span {
+            display: block;
+        }
+
+        .header-bold {
+            font-weight: 900;
+        }
+
+        .head_right {
+            text-align: right;
+            width: 20%;
+        }
+
+        .head_left, .head_right {
+            font-size: 11px;
+        }
+
+        .tite {
+            text-align: center;
+            margin-top: -1rem;
+        }
+
+        .tite h2 {
+            margin-bottom: 5px;
+            margin-top: 25px;
+        }
+
+        .tite span {
+            display: block;
+            font-size: 12px;
+        }
+
+        .tite_right {
+            display: flex;
+            float: right;
+            flex-direction: column;
+            margin-top: -3rem;
+            width: 150px;
+        }
+
+        .tite_right span {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .bottom-line {
+            position: relative;
+        }
+
+        .bottom-line-80:before {
+            position: absolute;
+            content: '';
+            width: 80px;
+            border-bottom: 1px dotted;
+            bottom: 0;
+        }
+
+        .bottom-line-30:before {
+            position: absolute;
+            content: '';
+            width: 30px;
+            border-bottom: 1px dotted;
+            bottom: 0;
+        }
+
+        .bottom-line-105:before {
+            position: absolute;
+            content: '';
+            width: 105px;
+            border-bottom: 1px dotted;
+            bottom: 0;
+        }
+
+        .bottom-line-4xx:before {
+            position: absolute;
+            content: '';
+            width: 448px;
+            border-bottom: 1px dotted;
+            bottom: 0;
+        }
+
+        .bottom-line-3xx:before {
+            position: absolute;
+            content: '';
+            width: 355px;
+            border-bottom: 1px dotted;
+            bottom: 0;
+        }
+
+        .bottom-line-150:before {
+            position: absolute;
+            content: '';
+            width: 150px;
+            border-bottom: 1px dotted;
+            bottom: 0;
+        }
+
+        .bottom-line-114:before {
+            position: absolute;
+            content: '';
+            width: 114px;
+            border-bottom: 1px dotted;
+            bottom: 0;
+        }
+
+        .d-inline-block {
+            display: inline-block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            border: 1px solid #000;
+        }
+
+        .sm-size {
+            font-size: 11px !important;
+        }
+
+        .wrapper {
+            padding: 0px 25px;
+            margin-left: 40px;
+        }
+
+        td,
+        th {
+            text-align: left;
+            padding: 4px 8px;
+            border-right: 1px solid #000;
+        }
+
+        td:nth-child(2n) {
+            text-align: right;
+        }
+
+        .content {
+            font-size: 12px;
+            padding: 1rem 0rem;
+            margin-top: -5px;
+        }
+
+        .content .lable {
+            font-weight: bold;
+        }
+
+        .padding_bt {
+            padding-bottom: 10px;
+            word-break: break-word;
+        }
+
+        .padding_bt_d2 {
+            padding-bottom: 5px;
+            word-break: break-word;
+        }
+
+        .p_month {
+            margin-top: 0rem;
+            text-align: right;
+            margin-bottom: 0rem;
+        }
+
+        .big-tbhead {
+            height: 40px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .yellow-header {
+            background-color: #FFFFE1;
+            border-bottom: 1px solid;
+        }
+
+        .sign {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly
+        }
+
+        .light-border-bottom {
+            border-bottom: 1px solid grey;
+        }
+
+        .sign div {
+            width: 20%;
+        }
+
+        .sign div p {
+            margin-bottom: 0px;
+        }
+
+        .sign div span {
+            font-size: 12px;
+        }
+
+        .sign .p_empty {
+            height: 4.3rem;
+        }
+
+        .sign .lable, .sign h4, .sign span {
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .sign span {
+            margin-left: auto;
+            margin-right: auto;
+            display: table;
+        }
+
+        .w-full {
+            width: 100%
+        }
+
+        .flex {
+            display: -webkit-flex; /* For older versions of Safari */
+            display: flex;
+        }
+
+        .flex-column {
+            -webkit-flex-direction: column; /* For older versions of Safari */
+            flex-direction: column;
+        }
+
+        .align-items-center {
+            -webkit-align-items: center; /* For older versions of Safari */
+            align-items: center;
+        }
+
+        .align-items-start {
+            -webkit-align-items: start; /* For older versions of Safari */
+            align-items: start;
+        }
+
+        .justify-content-center {
+            -webkit-justify-content: center; /* For older versions of Safari */
+            justify-content: center;
+        }
+
+        .justify-content-start {
+            -webkit-justify-content: start; /* For older versions of Safari */
+            justify-content: start;
+        }
+
+        .justify-content-between {
+            -webkit-justify-content: space-between; /* For older versions of Safari */
+            justify-content: space-between;
+        }
+
+        .py-1 {
+            padding: 0.25rem 0;
+        }
+
+        .px-1 {
+            padding: 0 0.25rem
+        }
+
+        .py-2 {
+            padding: 0.5rem 0;
+        }
+
+        .px-2 {
+            padding: 0 0.5rem
+        }
+
+        .mb-0 {
+            margin-bottom: 0;
+        }
+
+        .mt-0 {
+            margin-top: 0;
+        }
+
+        .font-bold {
+            font-weight: bold;
+        }
+
+        .uppercase {
+            text-transform: uppercase;
+        }
+
+        .signature {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: justify;
+            -moz-box-pack: justify;
+            -ms-flex-pack: justify;
+            -webkit-justify-content: space-around;
+            justify-content: space-around;
+        }
+
+        .signature-item {
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .signature-item-signer {
+            font-weight: bold;
+            padding: 0;
+            margin: 0;
+        }
+
+        .signature-item-note {
+            font-style: italic;
+            font-size: 13px;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .float-left {
+            float: left;
+        }
+        
+        .float-right {
+            float: right;
+        }
+
+        .company {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: start;
+            -moz-box-pack: start;
+            -ms-flex-pack: start;
+            justify-content: start;
+            padding: 10px;
+            font-size: 11px;
+            flex-direction: column;
+            -webkit-box-orient: vertical;
+        }
+
+        .company img {
+            height: 80px;
+            width: 80px;
+            margin-bottom: 12px;
+            margin-left: 30px;
+        }
+
+        #company-info {
+            line-height: 5px;
+        }
+
+        #company-info h3 {
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        #company-info p {
+            margin: 0;
+            margin-top: 10px;
+        }
+
+        .report-header {
+            display: -webkit-box;
+            -webkit-box-pack: justify;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .report-title {
+            /* Standard CSS */
+            text-align: center;
+            flex-grow: 1;
+
+            /* Older syntax for WebKit browsers */
+            display: -webkit-box;
+            -webkit-box-flex: 1;
+            -webkit-box-align: center;
+            -webkit-box-pack: center;
+
+            /* Standard flexbox syntax */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .report-title span {
+            padding: 5px;
+        }
+
+        .report-info {
+            /* Older syntax for WebKit browsers */
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-box-pack: center;
+
+            /* Standard flexbox syntax */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            font-size: 10px;
+        }
+
+        .report-info p {
+            margin: 1px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="reward-body">
+    <div class="a5-horizontal">
+
+        <div class="report-header">
+            <div class="company-info">
+                <div class="company">
+                    <img src="[Logo]">
+                    <div id="company-info">
+                        <h3>[CompanyName]</h3>
+                        <p>[CompanyAddress]</p>
+                        <p>Mã số thuế: [CompanyTax]</p>
+                    </div>
+                </div>
+            </div>
+            <div class="report-title">
+                <div class="tite"><br>
+                    <h2 style="text-transform: uppercase">[header]</h2>
+                    <span style="font-style: italic;">[OrginalBookDate]</span>
+                    <span>Số: [ProcedureNumber]</span>
+                </div>
+            </div>
+
+            <div class="report-info">
+                <p><strong>Mẫu số: 02 - VT</strong></p>
+                <p><i>(Ban hành theo TT số: 200/2014TT-BTC)</i></p>
+                <p><i>Ngày 22/12/2014 của bộ trưởng BCT</i></p>
+                <div class="inright">Nợ: [DebitCode]</div>
+                <div class="inright">Có: [CreditCode]</div>
+                <div class="inright">Loại tiền: VNĐ</div>
+            </div>
+        </div>
+        
+<!--        <div class="head">-->
+<!--            <div class="head_left">-->
+<!--                <span>[CompanyName]</span>-->
+<!--                <span>[CompanyAddress]</span>-->
+<!--                <span>Mã số thuế: [CompanyTax]</span>-->
+<!--            </div>-->
+<!--            <div class="head_right"><span>Mẫu số: 02 - VT</span></div>-->
+<!--        </div>-->
+<!--        <div class="tite"><br>-->
+<!--            <h2>PHIẾU XUẤT KHO</h2>-->
+<!--            <span style="font-style: italic;"><strong>[OrginalBookDate]</strong></span>-->
+<!--            <span class="py-2" style="font-size: 11px;">Số: [ProcedureNumber]</span>-->
+<!--            <div class="tite_right">-->
+<!--                <div style="margin-left: 22px; text-align: left;">-->
+<!--                    <div class="inright">Nợ: [DebitCode]</div>-->
+<!--                    <div class="inright">Có: [CreditCode]</div>-->
+<!--                    <div class="py-1">Loại tiền: VNĐ</div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <br></div>-->
+        <div class="content">
+            <div class="flex flex-column align-items-start justify-content-center" style="margin-bottom: 20px;">
+                <div class="flex align-items-center justify-content-start py-1">
+                    <span class="mb-0">Người mua:</span>
+                    <span class="px-2 mb-0"></span></div>
+                <div class="flex align-items-center justify-content-start py-1">
+                    <span class="mb-0">Khách hàng:</span>
+                    <span class="px-2 mb-0 uppercase"> [OrginalCompanyName] </span>
+                </div>
+                <div class="flex align-items-center justify-content-start py-1">
+                    <span class="mb-0">Địa chỉ:</span>
+                    <span class="px-2 mb-0">[OrginalAddress]</span>
+                </div>
+                <div class="flex align-items-center justify-content-start py-1">
+                    <span class="mb-0">Điện thoại:</span>
+                    <span class="px-2 mb-0"></span>
+                </div>
+                <div class="flex align-items-center justify-content-start py-1">
+                    <span class="mb-0">Mã số thuế:</span>
+                    <span class="px-2 mb-0">[InvoiceTaxCode]</span>
+                </div>
+                <div class="flex align-items-center justify-content-start py-1">
+                    <span class="mb-0">Diễn giải:</span>
+                    <span class="px-2 mb-0">[OrginalDescription]</span>
+                </div>
+                <div class="flex align-items-center justify-content-start py-1">
+                    <span class="mb-0">Nhân viên bán hàng:</span>
+                    <span class="px-2 mb-0"></span>
+                </div>
+                <div class="flex align-items-center justify-content-start py-2">
+                    <span class="mb-0">Xuất tại kho:</span>
+                    <span class="px-2 mb-0">[DebitWarehouse]</span>
+                </div>
+            </div>
+            <table>
+                <thead class="yellow-header">
+                <tr class="big-tbhead">
+                    <th style="text-align: center;">STT</th>
+                    <th style="text-align: center;">Mã hàng</th>
+                    <th style="text-align: center;">Diễn giải</th>
+                    <th style="text-align: center;">Đơn vị tính</th>
+                    <th style="text-align: center;">Mã kho</th>
+                    <th style="text-align: center;">Số lượng</th>
+                    <th style="text-align: center;">Đơn giá</th>
+                    <th style="text-align: center;">Thành tiền</th>
+                </tr>
+                </thead>
+                <tbody>
+                [TABLE_BODY_SECTION]
+                <template style="visibility: hidden;" id="table-row-template">
+                    <tr class="light-border-bottom">
+                        <td style="text-align: center">[Index]</td>
+                        <td style="text-align: left">[Code]</td>
+                        <td style="text-align: left">[Name]</td>
+                        <td style="text-align: left">[StockUnit]</td>
+                        <td style="text-align: left">[WarehouseName]</td>
+                        <td style="text-align: right">[Quantity]</td>
+                        <td style="text-align: right">[UnitPrice]</td>
+                        <td style="text-align: right">[Amount] VNĐ</td>
+                    </tr>
+                </template>
+                
+                <tr>
+                    <td colspan="3" class="text_center lable font-bold" style="text-align: left;"> Cộng</td>
+                    <td style="border-right: 1px solid #333333;"></td>
+                    <td style="border-right: 1px solid #333333;"></td>
+                    <td style="border-right: 1px solid #333333;"></td>
+                    <td style="border-right: 1px solid #333333;"></td>
+                    <td class="text_right lable font-bold" style="text-align: right;"> [SubTotal] VNĐ</td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="border-top: 1px solid #333333;"></td>
+                    <td colspan="5" style="border-top: 1px solid #333333;">
+                        <div class="w-full flex align-items-center justify-content-between">
+                            <span class="mb-0 mt-0 float-left">Cộng tiền hàng:</span>
+                            <span class="font-bold mb-0 mt-0 float-right"> [SubTotal] VNĐ </span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="border-top: 1px solid #333333;">
+                        <div class="w-full flex align-items-center justify-content-between">
+                            <span class="mb-0 mt-0 float-left">Thuế suất thuế GTGT:</span>
+                            <span class="font-bold mb-0 mt-0 float-right">[TaxPercent]%</span></div>
+                    </td>
+                    <td colspan="5" style="border-top: 1px solid #333333;">
+                        <div class="w-full flex align-items-center justify-content-between">
+                            <span class="mb-0 mt-0 float-left">Tiền thuế GTGT:</span>
+                            <span class="font-bold mb-0 mt-0 float-right"> [TaxTotal] VNĐ </span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" style="border-top: 1px solid #333333;"></td>
+                    <td colspan="5" style="border-top: 1px solid #333333;">
+                        <div class="w-full flex align-items-center justify-content-between">
+                            <span class="mb-0 mt-0 float-left">Tổng tiền thanh toán:</span>
+                            <span class="font-bold mb-0 mt-0 float-right"> [Total] VNĐ </span></div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="padding_bt_d2 sm-size" style="margin-top: 10px;"><span> Tổng số tiền (viết bằng chữ): <strong>[AmountInWords]</strong></span>
+            </div>
+            <div class="padding_bt_d2 sm-size"><span> Số chứng từ kèm theo: [AttachVoucher] </span></div>
+            <p class="p_month"><i> [OrginalBookDate]</i></p>
+            <section class="signature">
+                [SIGN_REPLACE_PLACE]
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+</html>

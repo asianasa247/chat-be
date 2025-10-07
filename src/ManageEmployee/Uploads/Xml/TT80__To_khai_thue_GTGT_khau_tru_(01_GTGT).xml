@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><HSoThueDTu xmlns="http://kekhaithue.gdt.gov.vn/TKhaiThue" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <HSoKhaiThue id="_NODE_TO_SIGN">
+    <TTinChung>
+      <TTinDVu>
+        <maDVu>MISA SME2022</maDVu>
+        <tenDVu>MISA SME 2022</tenDVu>
+        <pbanDVu>16.0.0.8</pbanDVu>
+        <ttinNhaCCapDVu>Công ty Cổ phẩn MISA JSC</ttinNhaCCapDVu>
+      </TTinDVu>
+      <TTinTKhaiThue>
+        <TKhaiThue>
+          <maTKhai>842</maTKhai>
+          <tenTKhai>TỜ KHAI THUẾ GIÁ TRỊ GIA TĂNG (MẫU SỐ 01/GTGT)</tenTKhai>
+          <moTaBMau/>
+          <pbanTKhaiXML>2.5.1</pbanTKhaiXML>
+          <loaiTKhai>C</loaiTKhai>
+          <soLan>0</soLan>
+          <KyKKhaiThue>
+            <kieuKy>M</kieuKy>
+            <kyKKhai>07/2022</kyKKhai>
+            <kyKKhaiTuNgay>01/07/2022</kyKKhaiTuNgay>
+            <kyKKhaiDenNgay>31/07/2022</kyKKhaiDenNgay>
+            <kyKKhaiTuThang/>
+            <kyKKhaiDenThang/>
+          </KyKKhaiThue>
+          <maCQTNoiNop>71701</maCQTNoiNop>
+          <tenCQTNoiNop>Thành phố Vũng Tàu - Chi cục Thuế khu vực Vũng Tàu - Côn Đảo</tenCQTNoiNop>
+          <ngayLapTKhai>2022-08-15</ngayLapTKhai>
+          <GiaHan>
+            <maLyDoGiaHan/>
+            <lyDoGiaHan/>
+          </GiaHan>
+          <nguoiKy>Đỗ Văn Nghĩa</nguoiKy>
+          <ngayKy>2022-08-15</ngayKy>
+          <nganhNgheKD/>
+        </TKhaiThue>
+        <NNT>
+          <mst>3502324074</mst>
+          <tenNNT>CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ HƯƠNG THỊNH PHÁT</tenNNT>
+          <dchiNNT>69 Xô Viết Nghệ Tĩnh, Phường Thắng Tam, Thành Phố Vũng Tàu, Tỉnh Bà Rịa - Vũng Tàu, Việt Nam</dchiNNT>
+          <phuongXa/>
+          <maHuyenNNT>Tp. Vũng Tàu</maHuyenNNT>
+          <tenHuyenNNT>Tp. Vũng Tàu</tenHuyenNNT>
+          <maTinhNNT>Bà Rịa - Vũng Tàu</maTinhNNT>
+          <tenTinhNNT>Bà Rịa - Vũng Tàu</tenTinhNNT>
+          <dthoaiNNT/>
+          <faxNNT/>
+          <emailNNT/>
+        </NNT>
+      </TTinTKhaiThue>
+    </TTinChung>
+    <CTieuTKhaiChinh>
+      <ma_NganhNghe>00</ma_NganhNghe>
+      <ten_NganhNghe>Hoạt động sản xuất kinh doanh thông thường</ten_NganhNghe>
+      <tieuMucHachToan>1701</tieuMucHachToan>
+      <Header>
+        <ct09 xsi:nil="true"/>
+        <ct10 xsi:nil="true"/>
+        <DiaChiHDSXKDKhacTinhNDTSC>
+          <ct11a_phuongXa_ma xsi:nil="true"/>
+          <ct11a_phuongXa_ten xsi:nil="true"/>
+          <ct11b_quanHuyen_ma xsi:nil="true"/>
+          <ct11b_quanHuyen_ten xsi:nil="true"/>
+          <ct11c_tinhTP_ma xsi:nil="true"/>
+          <ct11c_tinhTP_ten xsi:nil="true"/>
+        </DiaChiHDSXKDKhacTinhNDTSC>
+      </Header>
+      <ct21>0</ct21>
+      <ct22>749937629</ct22>
+      <GiaTriVaThueGTGTHHDVMuaVao>
+        <ct23>3897097540</ct23>
+        <ct24>389668198</ct24>
+      </GiaTriVaThueGTGTHHDVMuaVao>
+      <HangHoaDichVuNhapKhau>
+        <ct23a>0</ct23a>
+        <ct24a>0</ct24a>
+      </HangHoaDichVuNhapKhau>
+      <ct25>389668198</ct25>
+      <ct26>0</ct26>
+      <HHDVBRaChiuThueGTGT>
+        <ct27>3994375653</ct27>
+        <ct28>379049866</ct28>
+      </HHDVBRaChiuThueGTGT>
+      <ct29>0</ct29>
+      <HHDVBRaChiuTSuat5>
+        <ct30>0</ct30>
+        <ct31>0</ct31>
+      </HHDVBRaChiuTSuat5>
+      <HHDVBRaChiuTSuat10>
+        <ct32>3994375653</ct32>
+        <ct33>379049866</ct33>
+      </HHDVBRaChiuTSuat10>
+      <ct32a>0</ct32a>
+      <TongDThuVaThueGTGTHHDVBRa>
+        <ct34>3994375653</ct34>
+        <ct35>379049866</ct35>
+      </TongDThuVaThueGTGTHHDVBRa>
+      <ct36>-10618332</ct36>
+      <ct37>0</ct37>
+      <ct38>0</ct38>
+      <ct39a>0</ct39a>
+      <ct40a>0</ct40a>
+      <ct40b>0</ct40b>
+      <ct40>0</ct40>
+      <ct41>760555961</ct41>
+      <ct42>0</ct42>
+      <ct43>760555961</ct43>
+    </CTieuTKhaiChinh>
+    <PLuc>
+      <PL_NQ43_GTGT>
+        <BangKeTenHHDV ID="1">
+          <tenHHDV>+ 7up Chai nhựa 1500x12</tenHHDV>
+          <giaTriHHDV>32890000</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>657800</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="2">
+          <tenHHDV>+ 7up Chai nhựa 390x24</tenHHDV>
+          <giaTriHHDV>39103560</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>782071</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="3">
+          <tenHHDV>+ 7up Chai thủy tinh 285x24</tenHHDV>
+          <giaTriHHDV>3394620</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>67892</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="4">
+          <tenHHDV>+ 7Up Free Fiber Lon 320x24 Lốc</tenHHDV>
+          <giaTriHHDV>34200000</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>684000</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="5">
+          <tenHHDV>+ 7up Lon 320x24</tenHHDV>
+          <giaTriHHDV>43778560</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>875571</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="6">
+          <tenHHDV>+ Aquafina Chai  nhựa 355x24</tenHHDV>
+          <giaTriHHDV>85400000</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>1708000</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="7">
+          <tenHHDV>+ Aquafina Chai nhựa 1500x12</tenHHDV>
+          <giaTriHHDV>78229206</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>1564584</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="8">
+          <tenHHDV>+ Aquafina chai Nhựa 500 x 24</tenHHDV>
+          <giaTriHHDV>105420000</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>2108400</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="9">
+          <tenHHDV>+ Aquafina chai nhựa 5000x4</tenHHDV>
+          <giaTriHHDV>11031900</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>220638</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="10">
+          <tenHHDV>+ Aquafina Chai nhựa 500x28</tenHHDV>
+          <giaTriHHDV>13704075</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>274082</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="11">
+          <tenHHDV>+ Evervess Soda Lon 330x24</tenHHDV>
+          <giaTriHHDV>314142</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>6283</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="12">
+          <tenHHDV>+ Mirida Xá xị Chai nhựa 1500x12</tenHHDV>
+          <giaTriHHDV>18535148</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>370703</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="13">
+          <tenHHDV>+ Mirinda Cam chai nhựa 1500x12</tenHHDV>
+          <giaTriHHDV>10472000</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>209440</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="14">
+          <tenHHDV>+ Mirinda Cam chai nhựa 390x24</tenHHDV>
+          <giaTriHHDV>7833600</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>156672</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="15">
+          <tenHHDV>+ Mirinda Soda kem chai nhựa 390x24</tenHHDV>
+          <giaTriHHDV>21185640</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>423713</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="16">
+          <tenHHDV>+ Mirinda Soda kem lon 320x24</tenHHDV>
+          <giaTriHHDV>23400000</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>468000</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="17">
+          <tenHHDV>+ Mirinda Xá xị chai nhựa 390x24</tenHHDV>
+          <giaTriHHDV>8051200</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>161024</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="18">
+          <tenHHDV>+ Mirinda Xá xị Chai thủy tinh 300x24</tenHHDV>
+          <giaTriHHDV>809055</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>16181</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="19">
+          <tenHHDV>+ Pepsi  Lon 320x24</tenHHDV>
+          <giaTriHHDV>5425481</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>108510</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="20">
+          <tenHHDV>+ Pepsi Chai nhựa 1500x12</tenHHDV>
+          <giaTriHHDV>7480000</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>149600</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="21">
+          <tenHHDV>+ Pepsi Chai nhựa 390x24</tenHHDV>
+          <giaTriHHDV>29915875</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>598318</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="22">
+          <tenHHDV>+ Pepsi Chai thủy tinh 300x24</tenHHDV>
+          <giaTriHHDV>7238660</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>144773</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="23">
+          <tenHHDV>+ Revise Chai nhựa 500x24</tenHHDV>
+          <giaTriHHDV>38515662</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>770313</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="24">
+          <tenHHDV>+ Revise Chanh muối chai nhựa 390x24</tenHHDV>
+          <giaTriHHDV>35208272</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>704165</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="25">
+          <tenHHDV>+ Sting Cà phê chai nhựa 330x24</tenHHDV>
+          <giaTriHHDV>5292400</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>105848</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="26">
+          <tenHHDV>+ Sting Dâu đỏ  Lon 320x24</tenHHDV>
+          <giaTriHHDV>28857618</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>577152</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="27">
+          <tenHHDV>+ Sting Dâu tây đỏ chai nhựa 330x24</tenHHDV>
+          <giaTriHHDV>118419289</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>2368386</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="28">
+          <tenHHDV>+ Sting Dâu tây đỏ chai thủy tinh 240x24</tenHHDV>
+          <giaTriHHDV>14044800</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>280896</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="29">
+          <tenHHDV>+ Sting Vàng Chai nhựa 330x24</tenHHDV>
+          <giaTriHHDV>25108684</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>502174</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="30">
+          <tenHHDV>+ Tea+ Trà Ô long chai nhựa 350x24</tenHHDV>
+          <giaTriHHDV>20424780</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>408496</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="31">
+          <tenHHDV>+ Tea+ Trà Ô long chai nhựa 455x24</tenHHDV>
+          <giaTriHHDV>119946700</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>2398934</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="32">
+          <tenHHDV>+ Tea+ Trà Ô long chanh chai nhựa 455x24</tenHHDV>
+          <giaTriHHDV>8161470</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>163229</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="33">
+          <tenHHDV>+ Twister Cam chai nhựa 455x24</tenHHDV>
+          <giaTriHHDV>10308000</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>206160</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="34">
+          <tenHHDV>7Up Lon 320 x 24 tray lốc 6 - Summer</tenHHDV>
+          <giaTriHHDV>13940000</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>278800</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="35">
+          <tenHHDV>Chi Phí Bán hàng đạt sản lượng tháng và quý 2/2022</tenHHDV>
+          <giaTriHHDV>41330208</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>826604</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="36">
+          <tenHHDV>Chi phí đổi thưởng cho NPP C1 chương trình "Thưởng vị thăng hoa, đón xế sang về nhà"</tenHHDV>
+          <giaTriHHDV>16785000</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>335700</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="37">
+          <tenHHDV>Hỗ Trợ chương Trình khuyến mãi cho chi nhánh công ty Pepsico  Việt Nam Tại Đồng Nai giai đoạn từ ngày10/05/2022 đến 31/05/2022</tenHHDV>
+          <giaTriHHDV>247664</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>4953</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <BangKeTenHHDV ID="38">
+          <tenHHDV>Nhận tiền chi phí hao bể bao bì quý 1 và quý 2 năm 2022</tenHHDV>
+          <giaTriHHDV>2476100</giaTriHHDV>
+          <thueSuatTheoQuyDinh>10</thueSuatTheoQuyDinh>
+          <thueSuatSauGiam>8</thueSuatSauGiam>
+          <thueGTGTDuocGiam>49522</thueGTGTDuocGiam>
+        </BangKeTenHHDV>
+        <tongCongGiaTriHHDV>1086879369</tongCongGiaTriHHDV>
+        <tongCongThueGTGTDuocGiam>21737587</tongCongThueGTGTDuocGiam>
+      </PL_NQ43_GTGT>
+    </PLuc>
+  </HSoKhaiThue>
+<CKyDTu><ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315#WithComments"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference URI="#_NODE_TO_SIGN"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>hgSBDLoEYrvDjbbi5PncqZKZ4+Y=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>qLUbMBP4c3JtqIod5hZlov3zKh2oLuXAAVJa3uJJKkyJ3hoqNQvuW4YguAjXDjTTGWfje0GrQjJx
+mGIntV6fZmmuYHw1lULuVEgAndd/LM3CZopE/PZllVn6lXTn8cTSOtY55LDZeItz3QHmckaGEwZo
+NWu9pJrSFZCafyEtYv4=</ds:SignatureValue><ds:KeyInfo><ds:KeyValue><ds:RSAKeyValue><ds:Modulus>485SypdRtehfUxD3WBuaBO+TrZbTAZN45cKyLw75WAEfyGKPAXg+KrY7pVo9WOHvUS9aLPVua8wl
+0ELvN2bO35Xr2qqggg9CSqq+zBnPMGY/ncTLTlz/AfDm06Nk2n8fDZYgp4C8gPjtTtEwTmMPx5TC
+dbbdsfNaJI+INfCVHts=</ds:Modulus><ds:Exponent>AQAB</ds:Exponent></ds:RSAKeyValue></ds:KeyValue><ds:X509Data><ds:X509SubjectName>UID=MST:3502324074,CN=CÔNG TY TNHH THƯƠNG MẠI DỊCH VỤ HƯƠNG THỊNH PHÁT,L=Thành Phố Vũng Tàu,ST=Bà Rịa-Vũng Tàu,C=VN</ds:X509SubjectName><ds:X509Certificate>MIIF3jCCA8agAwIBAgIQVAEBAdPYgmX4voKcKqc6JzANBgkqhkiG9w0BAQUFADBpMQswCQYDVQQG
+EwJWTjETMBEGA1UEChMKVk5QVCBHcm91cDEeMBwGA1UECxMVVk5QVC1DQSBUcnVzdCBOZXR3b3Jr
+MSUwIwYDVQQDExxWTlBUIENlcnRpZmljYXRpb24gQXV0aG9yaXR5MB4XDTE5MTIxNjEzNTgwMFoX
+DTI0MDYyNjA4MDIwMFowgbcxCzAJBgNVBAYTAlZOMR0wGwYDVQQIDBRCw6AgUuG7i2EtVsWpbmcg
+VMOgdTEgMB4GA1UEBwwXVGjDoG5oIFBo4buRIFbFqW5nIFTDoHUxRzBFBgNVBAMMPkPDlE5HIFRZ
+IFROSEggVEjGr8agTkcgTeG6oEkgROG7ikNIIFbhu6QgSMavxqBORyBUSOG7ik5IIFBIw4FUMR4w
+HAYKCZImiZPyLGQBAQwOTVNUOjM1MDIzMjQwNzQwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGB
+AOPOUsqXUbXoX1MQ91gbmgTvk62W0wGTeOXCsi8O+VgBH8hijwF4Piq2O6VaPVjh71EvWiz1bmvM
+JdBC7zdmzt+V69qqoIIPQkqqvswZzzBmP53Ey05c/wHw5tOjZNp/Hw2WIKeAvID47U7RME5jD8eU
+wnW23bHzWiSPiDXwlR7bAgMBAAGjggG1MIIBsTBwBggrBgEFBQcBAQRkMGIwMgYIKwYBBQUHMAKG
+Jmh0dHA6Ly9wdWIudm5wdC1jYS52bi9jZXJ0cy92bnB0Y2EuY2VyMCwGCCsGAQUFBzABhiBodHRw
+Oi8vb2NzcC52bnB0LWNhLnZuL3Jlc3BvbmRlcjAdBgNVHQ4EFgQUqBvpK0sv6cDfegj0dA4nrtRu
+OngwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBQGacDV1QKKFY1Gfel84mgKVaxqrzBoBgNVHSAE
+YTBfMF0GDisGAQQBge0DAQEDAQEBMEswIgYIKwYBBQUHAgIwFh4UAE8ASQBEAC0AUwBUAC0AMQAu
+ADAwJQYIKwYBBQUHAgEWGWh0dHA6Ly9wdWIudm5wdC1jYS52bi9ycGEwMQYDVR0fBCowKDAmoCSg
+IoYgaHR0cDovL2NybC52bnB0LWNhLnZuL3ZucHRjYS5jcmwwDgYDVR0PAQH/BAQDAgTwMCAGA1Ud
+JQQZMBcGCisGAQQBgjcKAwwGCSqGSIb3LwEBBTAgBgNVHREEGTAXgRV0cm9uZ2RkLnZ0dUBnbWFp
+bC5jb20wDQYJKoZIhvcNAQEFBQADggIBAChbIS0pD+4AmKFgFCLU66XvVWPAsMrKSE96q8Mk/3AZ
+NgBOR82mE6q1zYBTdBgVYJJRAnk22eRbDfX6ARH8+/i8ZbO/7vvwiG7d78oX6GWYpyhyRqcTcGA7
+lkmk8XLDwxWX1ULJ+EuR9g/nSHzP03HCdboGE6GfAj7G4v7pc49ExxObbgN/ZkVUP2eNfpJUijxM
+oKt7EbODqih7RyPum4U66ynmjtbBpaAZCQJ1f603Q36itPq4aNt4fJ9yhWEnK+o6l2/zn1e7Bxg/
+B0HrSbQQDR6vC7tEjsd+p6KmnNFGuwvIebRsk2nn93QUo2hNcRnoERUcm8tqBj/VOQOqs8JieZ59
+AqaxNe4XTc8j6vQClbA2gdyAHmiGyfaxQdBSrzsArt9FAb0cCFryvDgBAtzf8R2xfhFJ7WgYqNiD
+JTfOqIEnf+wfYUJt1pdo0VCda8APoHLWbCPprHEs9jneGHp1bOzYzUxcYEPDNTkqCSzipHfYgPNC
+PwwM+3ddxVdpHqDhft1Hx0a6sFisK2P+5RnchdLXDgtOHx1UXpJoZdawSB6EDgPCZRqxLKD/cDkr
+7p6B1urbUnB93615G4R3qlFm43VIvFp6U6fVdAdE4ycPKaoijenP5Lq8HUMZ0n2pQ4p12J4hnlpo
+xV+F2UNNOHSvuNqD+xciTYHRuCLb83Db</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature></CKyDTu></HSoThueDTu>

@@ -1,0 +1,171 @@
+[
+    {
+        "title": "I-Thuế (10=11+12+13+...+19+20)",
+        "code": "10",
+        "accountcode":"",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0,
+        "rowtype":"0"
+    },
+    {
+        "title": "1. Thuế GTGT hàng bán nội địa",
+        "code": "11",
+        "accountcode":"33311",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0
+    },
+    {
+        "title": "2. Thuế GTGT hàng nhập khẩu",
+        "code": "12",
+        "accountcode":"33312",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0
+    },
+    {
+        "title": "3. Thuế tiêu thụ đặc biệt",
+        "code": "13",
+        "accountcode":"3332",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0
+    },
+    {
+        "title": "4. Thuế xuất khẩu, nhập khẩu",
+        "code": "14",
+        "accountcode":"3333",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0
+    },
+    {
+        "title": "5. Thuế thu nhập doanh nghiệp",
+        "code": "15",
+        "accountcode":"3334",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0
+    },
+    {
+        "title": "6. Thuế thu nhập cá nhân",
+        "code": "16",
+        "accountcode":"3335",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0
+    },
+    {
+        "title": "7. Thuế tài nguyên",
+        "code": "17",
+        "accountcode":"3336",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0
+    },
+    {
+        "title": "8. Thuế nhà đất",
+        "code": "18",
+        "accountcode":"33371",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0
+    },
+    {
+        "title": "9. Tiền thuê đất",
+        "code": "19",
+        "accountcode":"33372",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0
+    },
+    {
+        "title": "10. Các loại thuế khác",
+        "code": "20",
+        "accountcode":"3338",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0,
+        "rowtype":"0"
+    },
+    {
+        "title": "II- Các khoản phải nộp khác",
+        "code": "30",
+        "accountcode":"3339",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0,
+        "rowtype":"0"
+    },
+    {
+        "title": "1. Các khoản phụ thu",
+        "code": "31",
+        "accountcode":"33391",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0
+    },
+    {
+        "title": "2. Các khoản phí, lệ phí",
+        "code": "32",
+        "accountcode":"33392",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0
+    },
+    {
+        "title": "3. Các khoản phải nộp khác",
+        "code": "33",
+        "accountcode":"33393",
+        "soconphainopdauky":0,
+        "sopstk_phainop":0,
+        "sopstk_danop":0,
+        "luykedn_phainop":0,
+        "luykedn_danop":0,
+        "soconphainopcuoiky":0
+    }   
+
+]

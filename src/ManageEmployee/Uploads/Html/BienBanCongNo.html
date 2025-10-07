@@ -1,0 +1,244 @@
+<html>
+
+<head>
+    <style>
+        body {
+            background-color: white;
+        }
+
+        .txt-left {
+            text-align: left;
+        }
+
+        .txt-right {
+            text-align: right;
+        }
+
+        .txt-center {
+            text-align: center;
+        }
+
+        .tbl-style {
+            vertical-align: middle;
+            width: 100%;
+        }
+
+        .font-b {
+            font-weight: bold;
+        }
+
+        .title-tbl {
+            background-color: rgb(252, 213, 180);
+            font-size: 12px;
+        }
+
+        table {
+            page-break-inside: auto
+        }
+
+        tr {
+            page-break-inside: avoid;
+            page-break-after: auto
+        }
+
+        thead {
+            display: table-header-group
+        }
+
+        tfoot {
+            display: table-footer-group
+        }
+
+        /*.title-tbl tr th,*/
+        /*.tbody-replace tr td {*/
+        /*    border: 1px solid black;*/
+        /*}*/
+        
+        .tbl-bordered {
+            border: 1px solid black;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .tbl-bordered td {
+            border-bottom: 1px solid black;
+            border-right: 1px solid;
+        }
+        
+
+        .tbody-replace {
+            font-size: 11pt;
+            text-align: right;
+        }
+
+        .r-nm-bold {
+            font-weight: bold;
+        }
+
+        .r-nm-italic {
+            font-style: italic;
+        }
+
+        .tbody-table tr td {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <table class="tbl-style font-b">
+        <tbody style="font-size: 12pt;">
+            <tr class="txt-left">
+                <td colspan="3">{{{TenCongTy}}}</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="3">{{{DiaChi}}}</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="6"></td>
+            </tr>
+            <tr class="txt-center font-b" style="font-weight: bold; font-size: 16pt;">
+                <td colspan="6">BIÊN BẢN ĐỐI CHIẾU & XÁC NHẬN CÔNG NỢ</td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="6">Bên bán: {{{TenCongTy}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="6">Địa chỉ: {{{DiaChi}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="6">Mã số thuế: {{{MST}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td colspan="6"></td>
+                <td colspan="3">Bên mua: </td>
+                <td colspan="3">Mã khách hàng: {{{MaKhachHang}}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="tbl-style tbl-bordered" cellspacing="0" cellpadding="7">
+        <tbody class=" tbody-replace" style="font-size: 12pt;">
+            <tr class="txt-left">
+                <td class="font-b" colspan="2">Khách hàng</td>
+                <td colspan="3">{{{TenKhachHang}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td class="font-b" colspan="2">Địa chỉ</td>
+                <td colspan="3">{{{DiaChiKhachHang}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td  class="font-b" colspan="2">Điện thoại và điện thoại di động</td>
+                <td colspan="3">{{{PhoneKhachHang}}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="tbl-style">
+        <tbody style="font-size: 12pt;">
+            <tr class="txt-left font-b">
+                <td colspan="2">Thời điểm xác nhận: {{{TenKhachHang}}}</td>
+            </tr>
+            <tr class="txt-left">
+                <td class="font-b" colspan="3">Các nội dung đối chiếu: </td>
+                <td colspan="3">Đơn vị tính: VND</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="tbl-style tbl-bordered" cellspacing="0" cellpadding="7">
+        <tbody class="tbody-replace">
+            <tr>
+                <td colspan="3" class="txt-left font-b">1. Công nợ tồn đầu kỳ</td>
+                <td colspan="2">{{{CongNoTonDauKy}}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="txt-left font-b">2. Phát sinh tăng trong kỳ (2 = 2.1 + 2.2)</td>
+                <td colspan="2">{{{PhatSinhTangTrongKy}}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="txt-left">- Trong đó</td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="3" class="txt-left">2.1. Phải thu từ bán hàng</td>
+                <td colspan="2">{{{PhaiThuTuBanHang}}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="txt-left">2.2. Phải thu khác</td>
+                <td colspan="2">{{{PhaiThuKhac}}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="txt-left font-b">3. Phát sinh giảm trong kỳ (3 = 3.1 + 3.2 + 3.3)</td>
+                <td colspan="2">{{{PhatSinhGiamTrongKy}}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="txt-left">3.1. Thanh toán trong kỳ</td>
+                <td colspan="2">{{{ThanhToanTrongKy}}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="txt-left">3.2. Chiết khấu thanh toán</td>
+                <td colspan="2">{{{ChietKhauThanhToan}}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="txt-left">3.3. Giảm khác</td>
+                <td colspan="2">{{{GiamKhac}}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="txt-left font-b">4. Công nợ cuối kỳ (4 = 1 + 2 – 3)</td>
+                <td colspan="2">{{{CongNoCuoiKy}}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="txt-left font-b">5. Phát sinh tăng công nợ lũy kế năm</td>
+                <td colspan="2">{{{PhatSinhTangCongNoLuyKe}}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="txt-left font-b">6. Phát sinh giảm công nợ lũy kế năm</td>
+                <td colspan="2">{{{PhatSinhGiamCongNoLuyKe}}}</td>
+            </tr>
+            <tr>
+                <td colspan="3" class="txt-left font-b">7. Công nợ quá hạn thanh toán</td>
+                <td colspan="2"></td>
+            </tr>
+
+        </tbody>
+    </table>
+    <table class="tbl-style cellspacing="0" cellpadding="7">
+        <tbody class="txt-center font-b">
+        <tr class="txt-left">
+            <td colspan="2">Số tiền công nợ cuối kỳ viết bằng chữ:</td>
+            <td colspan="4">{{{SoTienVietBangChu}}}</td>
+        </tr>
+        <tr>
+            <td colspan="6" class="txt-left">Trân trọng cảm ơn!</td>
+        </tr>
+        <tr class="txt-center">
+            <td colspan="2" style="border: none;">Xác nhận của khách hàng</td>
+            <td colspan="2" style="border: none;">Kế toán trưởng</td>
+            <td colspan="2" style="border: none;">Giám đốc</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border: none;">(Ký, họ tên)</td>
+            <td colspan="2" style="border: none;">(Ký, họ tên)</td>
+            <td colspan="2" style="border: none;">(Ký, họ tên, đóng dấu)</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border: none;"></td>
+            <td colspan="2" style="border: none;"></td>
+            <td colspan="2" style="border: none;"></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border: none;"></td>
+            <td colspan="2" style="border: none;"></td>
+            <td colspan="2" style="border: none;"></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="border: none;">{{{NguoiLap}}}</td>
+            <td colspan="2" style="border: none;">{{{KeToanTruong}}}</td>
+            <td colspan="2" style="border: none;">{{{GiamDoc}}}</td>
+        </tr>
+
+        </tbody>
+    </table>    
+</body>
+
+</html>

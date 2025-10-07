@@ -1,0 +1,354 @@
+﻿<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu Thu</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page {
+            width: 1000px;
+            margin: 20px auto;
+        }
+
+        .header {
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .header strong {
+            font-size: 16px;
+        }
+
+        .right-text {
+            text-align: right;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 20px;
+            margin: 20px 0 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .sub-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        /* .receipt {
+            border: 1px solid #000;
+            padding: 20px;
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }*/
+
+        .sub-header-left {
+            text-align: center;
+            font-size: 12px;
+            /* Giảm cỡ chữ để phù hợp */
+            margin: 0;
+            /* Bỏ margin mặc định */
+            flex: 1;
+        }
+
+        .sub-header-right {
+            text-align: right;
+            font-size: 12px;
+            /* Giảm cỡ chữ để vừa */
+            margin-left: 20px;
+        }
+
+        .table {
+            width: 200px;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+
+        .table th,
+        .table td {
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .info {
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .info p {
+            margin: 5px 0;
+        }
+
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+
+        .signature-box {
+            width: 20%;
+            text-align: center;
+        }
+
+        .signature-container {
+            display: -webkit-box;
+            display: -moz-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: justify;
+            -moz-box-pack: justify;
+            -ms-flex-pack: justify;
+            -webkit-justify-content: space-around;
+            justify-content: space-around;
+        }
+
+        .big-tbhead {
+            height: 40px;
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .report-header {
+            display: -webkit-box;
+            -webkit-box-pack: justify;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .report-title {
+            /* Standard CSS */
+            text-align: center;
+            flex-grow: 1;
+
+            /* Older syntax for WebKit browsers */
+            display: -webkit-box;
+            -webkit-box-flex: 1;
+            -webkit-box-align: center;
+            -webkit-box-pack: center;
+
+            /* Standard flexbox syntax */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .report-title span {
+            padding: 5px;
+        }
+
+        .report-info {
+            /* Older syntax for WebKit browsers */
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-box-pack: center;
+
+            /* Standard flexbox syntax */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            font-size: 10px;
+        }
+
+        .report-info p {
+            margin: 1px;
+        }
+
+
+        #company-info {
+            line-height: 5px;
+        }
+
+        #company-info h3 {
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        #company-info p {
+            margin: 0;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <!-- Phiếu thu 1 -->
+        <div class="receipt">
+            <div class="report-header">
+                <div class="company-info">
+                    <div class="company">
+                        <img src="[Logo]">
+                        <div id="company-info">
+                            <h3>[CompanyName]</h3>
+                            <p>[CompanyAddress]</p>
+                            <p>Mã số thuế: [CompanyTax]</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="report-info">
+                    <p><strong>Mẫu số: 01 - TT</strong></p>
+                </div>
+            </div>
+
+            <div class="report-header">
+                <div class="report-title">
+                    <div class="tite"><br>
+                        <h2 style="text-transform: uppercase">[header]</h2>
+                        <span style="font-style: italic;">[OrginalBookDate]</span>
+                        <p>Liên 1: Lưu</p>
+                        <strong>Số: [OrginalVoucherNumber]</strong>
+                    </div>
+                </div>
+
+                <div class="report-info">
+                    <table>
+                        <tbody>
+                            [TABLE_BODY_SECTION]
+                            <!-- <template style="visibility: hidden;" id="table-row-template">
+                                <tr class="light-border-bottom ng-star-inserted tbl-row">
+                                    <td style="text-align: left;">[CreditCode]</td>
+                                    <td style="text-align: right;">[Amount] VNĐ</td>
+                                </tr>
+                            </template> -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Information Section -->
+            <div class="info">
+                <p><strong>Người nộp:</strong> [OrginalCompanyName]</p>
+                <p><strong>Địa chỉ:</strong> [OrginalAddress]</p>
+                <p><strong>Lý do:</strong> [OrginalDescription]</p>
+                <p><strong>Số tiền:</strong> [TotalAmount] VNĐ</p>
+                <p><strong>Bằng chữ:</strong> [AmountInWords]</p>
+                <p><strong>Kèm theo:</strong> .......................................... chứng từ gốc</p>
+                <p><strong>Đã nhận đủ:</strong> [AmountInWords]</p>
+            </div>
+            <div class="sub-header-right">
+                <p style="padding-right: 100px;">[OrginalBookDate]</p>
+            </div>
+
+            <!-- Footer Section -->
+            <div class="signature-container">
+                <div class="signature-box">
+                    <p><strong>TỔNG GIÁM ĐỐC</strong></p>
+                    <p>(Ký, họ tên, đóng dấu)</p>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <b>NGUYỄN THỊ CẨM MY</b>
+                </div>
+                <div class="signature-box">
+                    <p><strong>KẾ TOÁN TH</strong></p>
+                    <p>(Ký, họ tên)</p>
+                </div>
+                <div class="signature-box">
+                    <p><strong>Người lập phiếu</strong></p>
+                    <p>(Ký, họ tên)</p>
+                </div>
+                <div class="signature-box">
+                    <p><strong>Thủ quỹ</strong></p>
+                    <p>(Ký, họ tên)</p>
+                </div>
+            </div>
+            <br>
+            <br>
+            <br>
+            <!-- Phiếu thu 2 -->
+            <div class="right-text">Mẫu số: 01 - TT</div>
+            <!-- Header -->
+            <div class="header">
+                <strong>[CompanyName]</strong><br>
+                [CompanyAddress]<br>
+                Mã số thuế: [CompanyTax]
+            </div>
+
+            <!-- Title Section -->
+            <div class="title">[header]</div>
+
+            <!-- Sub-header with date and right content -->
+            <div class="sub-header">
+                <div class="sub-header-left">
+                    <span style="font-style: italic;">[OrginalBookDate]</span>
+                    <p>Liên 2: Giao cho khách hàng</p>
+                    <p><strong>Số: [OrginalVoucherNumber]</strong></p>
+                </div>
+
+                <div class="sub-header-right">
+                    <template class="table" id="table-row-template">
+                        <tr>
+                            <th>TK Có</th>
+                            <th>Số tiền</th>
+                        </tr>
+                        <tr>
+                            <td>[CreditCode]</td>
+                            <td>[Amount] VNĐ</td>
+                        </tr>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Information Section -->
+            <div class="info">
+                <p><strong>Người nộp:</strong> [OrginalCompanyName]</p>
+                <p><strong>Địa chỉ:</strong> [OrginalAddress]</p>
+                <p><strong>Lý do:</strong> [OrginalDescription]</p>
+                <p><strong>Số tiền:</strong> [TotalAmount] VNĐ</p>
+                <p><strong>Bằng chữ:</strong> [AmountInWords]</p>
+                <p><strong>Kèm theo:</strong> .......................................... chứng từ gốc</p>
+                <p><strong>Đã nhận đủ:</strong> [AmountInWords]</p>
+            </div>
+            <div class="sub-header-right">
+                <p style="padding-right: 100px;">[OrginalBookDate]</p>
+            </div>
+
+            <!-- Footer Section -->
+            <div class="signature-container">
+                <div class="signature-box">
+                    <p><strong>TỔNG GIÁM ĐỐC</strong></p>
+                    <p>(Ký, họ tên, đóng dấu)</p>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <b>NGUYỄN THỊ CẨM MY</b>
+                </div>
+                <div class="signature-box">
+                    <p><strong>KẾ TOÁN TH</strong></p>
+                    <p>(Ký, họ tên)</p>
+                </div>
+                <div class="signature-box">
+                    <p><strong>Người lập phiếu</strong></p>
+                    <p>(Ký, họ tên)</p>
+                </div>
+                <div class="signature-box">
+                    <p><strong>Thủ quỹ</strong></p>
+                    <p>(Ký, họ tên)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
