@@ -1,6 +1,0 @@
-# Ignore build folders
-**/bin/
-**/obj/
-.vs/
-*.user
-*.suo
