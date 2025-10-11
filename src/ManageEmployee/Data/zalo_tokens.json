@@ -1,5 +1,5 @@
-{
-    "accessToken": "C8T5EJ2mw6abaK4VEwl5H06mR4P6Z-CwIxeOGGQ4i0G_WGvd6AIU2Jsj7MjqYeHaChaC506Uo6yzcr8Z1PleIIIhH0SvYFfKGvHxR3oZyn8ibGjH3vEL2ZsMBoGEbw8dJ-vw6LcTz1S6gsrtRyNAO0s05ZL3vRj6TFSHCthKi7usyYfbFyAd12647WT0q-ON8ga2C1wCgqaUl2mxJEN5L2gkC30qnP0eNDTuE3-Dca8CtcX-JR2y0mQ2VnWrf9DLMC8yHoUPKm0bxReqrlmxUldV2YYpZNWRyRtsP_o21o78yBbK_E4X1k_rcqk1-chz-2Xx8k4Ep6hV92a99nQ6V2S6MczZDOK57nDW2Jmdb1W42M9vQb_hNKGeO7fXJRDm9azAIX8vk-fC",
-    "refreshToken": null,
-    "expiresAt": "2030-01-01T00:00:00Z"
+﻿{
+  "accessToken": "OA_ACCESS_TOKEN",
+  "refreshToken": "OA_REFRESH_TOKEN",
+  "expiresAt": "2030-01-01T00:00:00Z"
 }

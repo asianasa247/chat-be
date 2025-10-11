@@ -1,12 +1,10 @@
 ﻿using ManageEmployee.DataTransferObject.Chatbot;
-using ManageEmployee.Services.Chatbot;
 using ManageEmployee.Services.Interfaces.Chatbot;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ManageEmployee.Controllers
 {
-    // Webhook OA: không yêu cầu JWT
     [AllowAnonymous]
     [Route("api/zalo/webhook")]
     [ApiController]
@@ -28,7 +26,6 @@ namespace ManageEmployee.Controllers
             _zalo = zalo; _chatbot = chatbot; _subs = subs; _cfg = cfg; _log = log;
         }
 
-        // Endpoint verify cấu hình webhook
         [HttpGet]
         public IActionResult Verify([FromQuery(Name = "verify_token")] string? token)
         {
@@ -51,10 +48,8 @@ namespace ManageEmployee.Controllers
                 if (string.IsNullOrWhiteSpace(userId))
                     return Ok(new { ok = true });
 
-                // Lưu subscriber
                 await _subs.AddAsync(userId, ct);
 
-                // Xây câu trả lời: Company → ChatboxAIQA → Gemini
                 var reply = await _chatbot.BuildReplyAsync(text, ct);
                 await _zalo.SendTextAsync(userId, reply, ct);
 

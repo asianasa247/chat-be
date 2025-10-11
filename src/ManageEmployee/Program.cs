@@ -45,6 +45,7 @@ using ManageEmployee.Services.Interfaces.Customers;
 // CHAT SUPPORT <<<
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddMemoryCache();
 
 // Custom application.json by env
 IWebHostEnvironment env = builder.Environment;
@@ -108,7 +109,7 @@ builder.Services.AddScoped<IFloorService, FloorService>();
 builder.Services.AddScoped<IFacebookMessengerService, FacebookMessengerService>();
 builder.Services.AddScoped<IReminderService, ReminderService>();
 builder.Services.AddScoped<IListCustomerService, ListCustomerService>();
-builder.Services.AddScoped<IConvertProductService, ConvertProductService>();
+builder.Services.AddScoped<IConvertProductService, ConvertProductService>(); 
 builder.Services.AddScoped<VitaxInvoiceGetterJob>();
 // DANG KÝ CHO CHATBOX AI
 builder.Services.AddScoped<IChatboxAIQAService, ChatboxAIQAService>();
@@ -119,6 +120,7 @@ builder.Services.AddScoped<IAlepayService, AlepayService>();
 builder.Services.AddScoped<IPlantingTypeService, ManageEmployee.Services.Cultivation.PlantingTypeService>();
 builder.Services.AddScoped<IPlantingRegionService, ManageEmployee.Services.Cultivation.PlantingRegionService>();
 builder.Services.AddScoped<IPlantingBedService, ManageEmployee.Services.Cultivation.PlantingBedService>();
+
 // === Zalo Chatbot DI ===
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<ManageEmployee.Services.Interfaces.Chatbot.ITokenStore, ManageEmployee.Services.Chatbot.FileTokenStore>();
@@ -130,10 +132,9 @@ builder.Services.AddScoped<ManageEmployee.Services.Interfaces.Chatbot.IZaloChatb
 
 // Jobs
 builder.Services.AddScoped<ManageEmployee.Services.Chatbot.ZaloSchedulePollingJob>();
-
+builder.Services.AddScoped<ManageEmployee.Services.Chatbot.ZaloTokenRefreshJob>(); // NEW: job refresh token định kỳ
 
 // CHAT SUPPORT >>>
-// Đăng ký service ChatSupport (EF lưu DB)
 builder.Services.AddScoped<IChatSupportService, ChatSupportEfService>();
 // CHAT SUPPORT <<<
 
@@ -157,44 +158,38 @@ builder.Services.AddAuthentication(options =>
 
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-    .AddJwtBearer(options =>
+.AddJwtBearer(options =>
+{
+    options.SaveToken = true;
+    options.RequireHttpsMetadata = false;
+    options.TokenValidationParameters = new TokenValidationParameters()
     {
-        options.SaveToken = true;
-        options.RequireHttpsMetadata = false;
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidAudience = configuration["JWT:ValidAudience"],
-            ValidIssuer = configuration["JWT:ValidIssuer"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
-        };
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = configuration["JWT:ValidAudience"],
+        ValidIssuer = configuration["JWT:ValidIssuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+    };
 
-        // CHAT SUPPORT >>>
-        // Cho phép SignalR lấy JWT qua query string khi negotiate WebSocket tới /hubs/chatsupport
-        options.Events = new JwtBearerEvents
+    // CHAT SUPPORT >>>
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
         {
-            OnMessageReceived = context =>
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/chatsupport"))
             {
-                var accessToken = context.Request.Query["access_token"];
-                var path = context.HttpContext.Request.Path;
-                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/chatsupport"))
-                {
-                    context.Token = accessToken;
-                }
-                return Task.CompletedTask;
+                context.Token = accessToken;
             }
-        };
-        // CHAT SUPPORT <<<
-    });
-//builder.Services.AddHostedService<SendMailCronJob>();//datnguyen-dev: 24-01-2025
-// Hangfire
+            return Task.CompletedTask;
+        }
+    };
+    // CHAT SUPPORT <<<
+});
 
-//builder.Services.AddHangfire((serviceProvider, dbContextBuilder) =>
-//{
-//    var connectionString = connectionStringPlaceHolder.Replace("{dbName}", dbName);
-//    dbContextBuilder.UseSqlServerStorage(connectionString);
-//});
+//builder.Services.AddHostedService<SendMailCronJob>();//datnguyen-dev: 24-01-2025
+
 builder.Services.AddScoped<IEventRegistrationService, EventRegistrationService>();
 builder.Services.AddHangfireServer();
 
@@ -206,16 +201,15 @@ builder.Services.AddHttpClient<IViettelPostService, ViettelPostService>((service
     httpClient.DefaultRequestHeaders.Add("Content-Type", "application/json");
 });
 
-//RecurringJob.AddOrUpdate(() => SendMailBirthdayJob.SendMail(ApplicationDbContext dbContext), Cron.Daily(9,0));
-
 //builder.Services.AddControllers();
 builder.Services.AddControllers(
-                        option =>
-                        {
-                            //option.Filters.Add(typeof(OnExceptionFilter));
-                            option.EnableEndpointRouting = false;
-                        }
+                    option =>
+                    {
+                        //option.Filters.Add(typeof(OnExceptionFilter));
+                        option.EnableEndpointRouting = false;
+                    }
 ).AddNewtonsoftJson();
+
 builder.Services.AddHttpClient();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -240,10 +234,7 @@ builder.Services.AddSwaggerGen(swagger =>
         Title = "Isoft API",
         Description = "Assian API"
     });
-    // using System.Reflection;
-    //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    //swagger.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-    // To Enable authorization using Swagger (JWT)
+
     swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Name = "Authorization",
@@ -268,7 +259,7 @@ builder.Services.AddSwaggerGen(swagger =>
             new string[] { }
         }
     });
-    
+
 });
 
 // Filter
@@ -305,21 +296,20 @@ using (var scope = app.Services.CreateScope())
         db.SaveChanges();
     }
 
-    // DEV fallback: nếu vẫn chưa có thì seed keys sandbox từ tài liệu
+    // DEV fallback
     if (!db.AlepayConfigs.Any() && app.Environment.IsDevelopment())
     {
         db.AlepayConfigs.Add(new AlepayConfig
         {
             IsSandbox = true,
-            TokenKey = "0COVspcyOZRNrsMsbHTdt8zesP9m0y",      // sample in doc :contentReference[oaicite:6]{index=6}
-            ChecksumKey = "hjuEmsbcohOwgJLCmJlf7N2pPFU1Le",   // sample in doc :contentReference[oaicite:7]{index=7}
+            TokenKey = "0COVspcyOZRNrsMsbHTdt8zesP9m0y",
+            ChecksumKey = "hjuEmsbcohOwgJLCmJlf7N2pPFU1Le",
             CustomMerchantId = null,
             AdditionWebId = null
         });
         db.SaveChanges();
     }
 }
-
 
 app.UseFileServer();
 app.UseRouting();
@@ -350,7 +340,6 @@ app.Use((context, next) =>
     return next(context);
 });
 
-// Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -377,7 +366,6 @@ app.Use(async (context, next) =>
     }
     else
     {
-        //context.Request.EnableBuffering(bufferThreshold: 1024 * 45, bufferLimit: 1024 * 100);
         await next();
     }
 });
@@ -406,7 +394,6 @@ if (!app.Environment.IsDevelopment())
 }
 
 // CHAT SUPPORT >>>
-// Map hub ChatSupport cho mọi môi trường (dev/prod)
 app.MapHub<ChatSupportHub>("/hubs/chatsupport");
 // CHAT SUPPORT <<<
 
@@ -415,7 +402,7 @@ app.Lifetime.ApplicationStarted.Register(() =>
     using var scope = app.Services.CreateScope();
     var jobManager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
 
-    // (đã có của mày)
+    // (đã có)
     jobManager.AddOrUpdate<VitaxInvoiceGetterJob>(
         "VitaxInvoice_MiddleDays",
         job => job.RunGetInvoiceJobWrapper(),
@@ -427,8 +414,16 @@ app.Lifetime.ApplicationStarted.Register(() =>
         "Zalo_Schedule_Polling_Per_Minute",
         job => job.RunAsync(CancellationToken.None),
         "* * * * *" // chạy mỗi phút
-                    // , timeZone: TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time") // nếu server không ở VN
+                    // , timeZone: TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time")
+    );
+
+    // === NEW: Job làm mới token định kỳ (nếu đã cấu hình OAuth refresh) ===
+    jobManager.AddOrUpdate<ManageEmployee.Services.Chatbot.ZaloTokenRefreshJob>(
+        "Zalo_Token_Refresh_Every_30min",
+        job => job.RunAsync(CancellationToken.None),
+        "*/30 * * * *"
     );
 });
+
 app.MapControllers();
 app.Run();
