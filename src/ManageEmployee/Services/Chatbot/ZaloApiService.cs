@@ -10,7 +10,7 @@ namespace ManageEmployee.Services.Chatbot
     /// Client gửi tin nhắn OA Zalo.
     /// - Đọc access token từ ITokenStore (file JSON).
     /// - Tự động refresh khi hết hạn (nếu cấu hình đầy đủ).
-    /// - Retry 1 lần nếu gặp 401 do token hết hạn.
+    /// - Retry 1 lần nếu gặp 401/403 do token hết hạn.
     /// </summary>
     public sealed class ZaloApiService : IZaloApiService
     {
@@ -39,9 +39,6 @@ namespace ManageEmployee.Services.Chatbot
             _sendTextPath = _cfg["Zalo:SendTextPath"] ?? "/v3.0/oa/message";
         }
 
-        /// <summary>
-        /// Bảo đảm có access token hợp lệ. Nếu hết hạn, thử refresh (nếu có cấu hình).
-        /// </summary>
         private async Task<string> EnsureAccessTokenAsync(CancellationToken ct)
         {
             var t = await _tokens.LoadAsync(ct) ?? throw new("OA token missing (Data/zalo_tokens.json).");
@@ -58,10 +55,6 @@ namespace ManageEmployee.Services.Chatbot
             return t.AccessToken;
         }
 
-        /// <summary>
-        /// Thực hiện refresh access token bằng refresh_token + app_id/app_secret (tuỳ spec OA).
-        /// Trả true nếu có token mới và đã lưu vào store.
-        /// </summary>
         private async Task<bool> RefreshAccessTokenAsync(CancellationToken ct)
         {
             var url = _cfg["Zalo:OAuthRefreshUrl"];
@@ -82,12 +75,14 @@ namespace ManageEmployee.Services.Chatbot
 
             using var client = _http.CreateClient();
 
-            // ⚠️ Tuỳ theo tài liệu OA: nếu cần grant_type, thêm vào form
+            // Zalo OA v4 yêu cầu secret_key ở header
+            client.DefaultRequestHeaders.Remove("secret_key");
+            client.DefaultRequestHeaders.Add("secret_key", appSecret);
+
             var form = new Dictionary<string, string>
             {
                 ["app_id"] = appId,
-                ["app_secret"] = appSecret,
-                ["refresh_token"] = refresh,
+                ["refresh_token"] = refresh!,
                 ["grant_type"] = "refresh_token"
             };
 
@@ -114,7 +109,6 @@ namespace ManageEmployee.Services.Chatbot
                 using var doc = JsonDocument.Parse(body);
                 var root = doc.RootElement;
 
-                // Mapping chung: access_token / refresh_token / expires_in (giây)
                 var newAccess = root.TryGetProperty("access_token", out var at) ? at.GetString() : null;
                 var newRefresh = root.TryGetProperty("refresh_token", out var rt) ? rt.GetString() : refresh;
                 var expiresInSec = root.TryGetProperty("expires_in", out var ei) ? ei.GetInt32() : 3600;
@@ -144,13 +138,11 @@ namespace ManageEmployee.Services.Chatbot
 
         public async Task SendTextAsync(string userId, string text, CancellationToken ct = default)
         {
-            // Lần 1: gửi với token hiện tại (EnsureAccessTokenAsync sẽ refresh nếu hết hạn theo thời gian)
             var token = await EnsureAccessTokenAsync(ct);
             var ok = await TrySendAsync(token, userId, text, ct);
 
             if (ok) return;
 
-            // Nếu thất bại do 401 → thử refresh theo phản hồi và gửi lại 1 lần
             _log.LogInformation("Send failed once. Trying refresh then retry...");
             var refreshed = await RefreshAccessTokenAsync(ct);
             if (!refreshed)
@@ -170,7 +162,10 @@ namespace ManageEmployee.Services.Chatbot
             var url = $"{_apiBase.TrimEnd('/')}{_sendTextPath}";
 
             using var req = new HttpRequestMessage(HttpMethod.Post, url);
-            req.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // CHUẨN OA V3: dùng header access_token (không dùng Bearer Authorization)
+            req.Headers.Remove("access_token");
+            req.Headers.Add("access_token", token);
 
             var payload = new
             {
@@ -192,7 +187,6 @@ namespace ManageEmployee.Services.Chatbot
             }
 
             _log.LogWarning("Zalo sendText fail {Status} {Body}", res.StatusCode, body);
-            // Các lỗi khác coi như không thể tự xử lý, ném exception
             throw new($"Zalo sendText failed: {(int)res.StatusCode}");
         }
     }
