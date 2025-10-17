@@ -33,14 +33,12 @@ namespace ManageEmployee.Controllers
             _log = log;
         }
 
-        // 1) Start OAuth: tạo state + PKCE, redirect qua trang permission của Zalo
-        //   GET https://ql.asianasa.com/api/zalo/oauth/start
+        // GET /api/zalo/oauth/start
         [HttpGet("start")]
         public IActionResult Start()
         {
             var appId = _cfg["Zalo:AppId"];
-            var cb = Url.ActionLink(nameof(Callback), values: null)!; // -> https://ql.asianasa.com/api/zalo/oauth/callback
-
+            var cb = Url.ActionLink(nameof(Callback), values: null)!; // https://ql.asianasa.com/api/zalo/oauth/callback
             if (string.IsNullOrWhiteSpace(appId))
                 return BadRequest("Missing Zalo:AppId in appsettings.");
 
@@ -49,7 +47,6 @@ namespace ManageEmployee.Controllers
             var codeVerifier = GenerateCodeVerifier();
             var codeChallenge = GenerateCodeChallenge(codeVerifier);
 
-            // Lưu tạm code_verifier theo state (10 phút)
             _cache.Set("zalo.pkce." + state, codeVerifier, TimeSpan.FromMinutes(10));
 
             var permissionBase = _cfg["Zalo:PermissionEndpoint"] ?? "https://oauth.zaloapp.com/v4/oa/permission";
@@ -61,8 +58,7 @@ namespace ManageEmployee.Controllers
             return Redirect(url);
         }
 
-        // 2) OAuth callback: nhận code + state, đổi lấy access_token + refresh_token rồi lưu vào Data/zalo_tokens.json
-        //   GET https://ql.asianasa.com/api/zalo/oauth/callback?code=...&state=...
+        // GET /api/zalo/oauth/callback?code=...&state=...
         [HttpGet("callback")]
         public async Task<IActionResult> Callback([FromQuery] string? code, [FromQuery] string? state, CancellationToken ct)
         {
@@ -75,13 +71,10 @@ namespace ManageEmployee.Controllers
             var appId = _cfg["Zalo:AppId"];
             var appSecret = _cfg["Zalo:AppSecret"];
             var tokenUrl = _cfg["Zalo:OAuthRefreshUrl"] ?? "https://oauth.zaloapp.com/v4/oa/access_token";
-
             if (string.IsNullOrWhiteSpace(appId) || string.IsNullOrWhiteSpace(appSecret))
                 return Content("Missing AppId/AppSecret in appsettings.");
 
             using var client = _http.CreateClient();
-            // Theo hướng dẫn thực tế: header 'secret_key' và body form (grant_type=authorization_code, app_id, code, code_verifier)
-            // (Một số tài liệu cũ truyền secret trong body; bản này dùng header 'secret_key')  :contentReference[oaicite:1]{index=1}
             client.DefaultRequestHeaders.Remove("secret_key");
             client.DefaultRequestHeaders.Add("secret_key", appSecret);
 
@@ -106,10 +99,12 @@ namespace ManageEmployee.Controllers
             {
                 using var doc = JsonDocument.Parse(text);
                 var root = doc.RootElement;
+
                 var access = root.GetProperty("access_token").GetString();
                 var refresh = root.TryGetProperty("refresh_token", out var r) ? r.GetString() : null;
-                var expiresIn = root.TryGetProperty("expires_in", out var e) ? e.GetInt32() : 3600;
-                if (string.IsNullOrWhiteSpace(access)) return Content("Token exchange OK but access_token missing.");
+                var expiresIn = ReadIntFlexible(root, "expires_in", 3600);
+                if (string.IsNullOrWhiteSpace(access))
+                    return Content("Token exchange OK but access_token missing.");
 
                 await _tokenStore.SaveAsync(new ManageEmployee.Entities.Chatbot.ZaloTokens
                 {
@@ -127,10 +122,20 @@ namespace ManageEmployee.Controllers
             }
         }
 
-        // === Helpers ===
+        // ==== Helpers ====
+        private static int ReadIntFlexible(JsonElement root, string prop, int @default)
+        {
+            if (!root.TryGetProperty(prop, out var el)) return @default;
+            return el.ValueKind switch
+            {
+                JsonValueKind.Number => el.TryGetInt32(out var n) ? n : @default,
+                JsonValueKind.String => int.TryParse(el.GetString(), out var s) ? s : @default,
+                _ => @default
+            };
+        }
+
         private static string GenerateCodeVerifier()
         {
-            // 43–128 chars, URL-safe
             var bytes = RandomNumberGenerator.GetBytes(64);
             return Base64Url(bytes);
         }

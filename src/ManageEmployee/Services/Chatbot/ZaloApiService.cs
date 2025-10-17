@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using ManageEmployee.Services.Interfaces.Chatbot;
@@ -51,8 +50,18 @@ namespace ManageEmployee.Services.Chatbot
                     throw new("OA token expired & refresh failed. Please update Data/zalo_tokens.json or configure refresh.");
                 t = await _tokens.LoadAsync(ct) ?? throw new("Reload token failed after refresh.");
             }
-
             return t.AccessToken;
+        }
+
+        private static int ReadIntFlexible(JsonElement root, string prop, int @default)
+        {
+            if (!root.TryGetProperty(prop, out var el)) return @default;
+            return el.ValueKind switch
+            {
+                JsonValueKind.Number => el.TryGetInt32(out var n) ? n : @default,
+                JsonValueKind.String => int.TryParse(el.GetString(), out var s) ? s : @default,
+                _ => @default
+            };
         }
 
         private async Task<bool> RefreshAccessTokenAsync(CancellationToken ct)
@@ -74,8 +83,6 @@ namespace ManageEmployee.Services.Chatbot
             }
 
             using var client = _http.CreateClient();
-
-            // Zalo OA v4 yêu cầu secret_key ở header
             client.DefaultRequestHeaders.Remove("secret_key");
             client.DefaultRequestHeaders.Add("secret_key", appSecret);
 
@@ -111,8 +118,7 @@ namespace ManageEmployee.Services.Chatbot
 
                 var newAccess = root.TryGetProperty("access_token", out var at) ? at.GetString() : null;
                 var newRefresh = root.TryGetProperty("refresh_token", out var rt) ? rt.GetString() : refresh;
-                var expiresInSec = root.TryGetProperty("expires_in", out var ei) ? ei.GetInt32() : 3600;
-
+                var expiresInSec = ReadIntFlexible(root, "expires_in", 3600);
                 if (string.IsNullOrWhiteSpace(newAccess))
                 {
                     _log.LogWarning("Refresh OK but access_token not found in response.");
@@ -140,16 +146,12 @@ namespace ManageEmployee.Services.Chatbot
         {
             var token = await EnsureAccessTokenAsync(ct);
             var ok = await TrySendAsync(token, userId, text, ct);
-
             if (ok) return;
 
             _log.LogInformation("Send failed once. Trying refresh then retry...");
             var refreshed = await RefreshAccessTokenAsync(ct);
             if (!refreshed)
-            {
-                _log.LogWarning("Refresh attempt failed. Give up.");
                 throw new("Zalo sendText failed and refresh unsuccessful.");
-            }
 
             var token2 = await EnsureAccessTokenAsync(ct);
             var ok2 = await TrySendAsync(token2, userId, text, ct);
@@ -160,10 +162,9 @@ namespace ManageEmployee.Services.Chatbot
         private async Task<bool> TrySendAsync(string token, string userId, string text, CancellationToken ct)
         {
             var url = $"{_apiBase.TrimEnd('/')}{_sendTextPath}";
-
             using var req = new HttpRequestMessage(HttpMethod.Post, url);
 
-            // CHUẨN OA V3: dùng header access_token (không dùng Bearer Authorization)
+            // OA v3: access_token ở HEADER
             req.Headers.Remove("access_token");
             req.Headers.Add("access_token", token);
 
@@ -183,7 +184,7 @@ namespace ManageEmployee.Services.Chatbot
             if (res.StatusCode == HttpStatusCode.Unauthorized || res.StatusCode == HttpStatusCode.Forbidden)
             {
                 _log.LogWarning("Zalo sendText 401/403. Body: {Body}", body);
-                return false; // cho phép caller refresh + retry
+                return false; // để caller refresh + retry
             }
 
             _log.LogWarning("Zalo sendText fail {Status} {Body}", res.StatusCode, body);
