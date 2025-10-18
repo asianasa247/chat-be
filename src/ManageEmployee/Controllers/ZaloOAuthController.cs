@@ -33,12 +33,12 @@ namespace ManageEmployee.Controllers
             _log = log;
         }
 
-        // GET /api/zalo/oauth/start
+        // GET https://ql.asianasa.com/api/zalo/oauth/start
         [HttpGet("start")]
         public IActionResult Start()
         {
             var appId = _cfg["Zalo:AppId"];
-            var cb = Url.ActionLink(nameof(Callback), values: null)!; // https://ql.asianasa.com/api/zalo/oauth/callback
+            var cb = Url.ActionLink(nameof(Callback), values: null)!;
             if (string.IsNullOrWhiteSpace(appId))
                 return BadRequest("Missing Zalo:AppId in appsettings.");
 
@@ -58,15 +58,13 @@ namespace ManageEmployee.Controllers
             return Redirect(url);
         }
 
-        // GET /api/zalo/oauth/callback?code=...&state=...
+        // GET https://ql.asianasa.com/api/zalo/oauth/callback?code=...&state=...
+        // Một số luồng Zalo trả về KHÔNG có state -> fallback legacy (không dùng PKCE).
         [HttpGet("callback")]
         public async Task<IActionResult> Callback([FromQuery] string? code, [FromQuery] string? state, CancellationToken ct)
         {
-            if (string.IsNullOrWhiteSpace(code) || string.IsNullOrWhiteSpace(state))
+            if (string.IsNullOrWhiteSpace(code))
                 return Content("Missing code/state.");
-
-            if (!_cache.TryGetValue("zalo.pkce." + state, out string? codeVerifier) || string.IsNullOrWhiteSpace(codeVerifier))
-                return Content("State expired or invalid. Please /api/zalo/oauth/start again.");
 
             var appId = _cfg["Zalo:AppId"];
             var appSecret = _cfg["Zalo:AppSecret"];
@@ -78,17 +76,28 @@ namespace ManageEmployee.Controllers
             client.DefaultRequestHeaders.Remove("secret_key");
             client.DefaultRequestHeaders.Add("secret_key", appSecret);
 
-            var body = new Dictionary<string, string>
+            // Nếu có state + tìm được code_verifier thì dùng chuẩn PKCE;
+            // nếu không có (hoặc hết hạn trong cache) thì đổi token theo luồng legacy (không code_verifier).
+            var form = new Dictionary<string, string>
             {
                 ["grant_type"] = "authorization_code",
                 ["app_id"] = appId!,
-                ["code"] = code!,
-                ["code_verifier"] = codeVerifier!
+                ["code"] = code!
             };
 
-            var res = await client.PostAsync(tokenUrl, new FormUrlEncodedContent(body), ct);
-            var text = await res.Content.ReadAsStringAsync(ct);
+            if (!string.IsNullOrWhiteSpace(state) &&
+                _cache.TryGetValue("zalo.pkce." + state, out string? codeVerifier) &&
+                !string.IsNullOrWhiteSpace(codeVerifier))
+            {
+                form["code_verifier"] = codeVerifier!;
+            }
+            else
+            {
+                _log.LogInformation("Zalo OAuth callback without usable state/PKCE. Proceeding with legacy exchange.");
+            }
 
+            var res = await client.PostAsync(tokenUrl, new FormUrlEncodedContent(form), ct);
+            var text = await res.Content.ReadAsStringAsync(ct);
             if (!res.IsSuccessStatusCode)
             {
                 _log.LogWarning("Zalo token exchange failed: {Status} {Body}", res.StatusCode, text);
