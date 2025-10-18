@@ -9,8 +9,8 @@ namespace ManageEmployee.Services.Chatbot
     /// Client gửi tin nhắn OA Zalo.
     /// - Đọc access token từ ITokenStore (file JSON).
     /// - Tự động refresh khi hết hạn (nếu cấu hình đầy đủ).
-    /// - Retry 1 lần nếu gặp 401/403 do token hết hạn.
-    /// - Log chi tiết response từ Zalo để dễ debug.
+    /// - Retry 1 lần nếu gặp token hết hạn/invalid.
+    /// - Kiểm tra body JSON: chỉ coi là thành công khi error == 0.
     /// </summary>
     public sealed class ZaloApiService : IZaloApiService
     {
@@ -146,21 +146,30 @@ namespace ManageEmployee.Services.Chatbot
         public async Task SendTextAsync(string userId, string text, CancellationToken ct = default)
         {
             var token = await EnsureAccessTokenAsync(ct);
-            var ok = await TrySendAsync(token, userId, text, ct);
-            if (ok) return;
+            var result = await TrySendAsync(token, userId, text, ct);
+            if (result == TrySendResult.Success) return;
 
-            _log.LogInformation("Send failed once. Trying refresh then retry...");
-            var refreshed = await RefreshAccessTokenAsync(ct);
-            if (!refreshed)
-                throw new("Zalo sendText failed and refresh unsuccessful.");
+            if (result == TrySendResult.ShouldRefresh)
+            {
+                _log.LogInformation("Send failed (token issue). Trying refresh then retry...");
+                var refreshed = await RefreshAccessTokenAsync(ct);
+                if (!refreshed)
+                    throw new("Zalo sendText failed and refresh unsuccessful.");
 
-            var token2 = await EnsureAccessTokenAsync(ct);
-            var ok2 = await TrySendAsync(token2, userId, text, ct);
-            if (!ok2)
-                throw new("Zalo sendText failed after refresh.");
+                var token2 = await EnsureAccessTokenAsync(ct);
+                var result2 = await TrySendAsync(token2, userId, text, ct);
+                if (result2 != TrySendResult.Success)
+                    throw new("Zalo sendText failed after refresh.");
+            }
+            else
+            {
+                throw new("Zalo sendText failed (API returned error).");
+            }
         }
 
-        private async Task<bool> TrySendAsync(string token, string userId, string text, CancellationToken ct)
+        private enum TrySendResult { Success, ShouldRefresh, Fail }
+
+        private async Task<TrySendResult> TrySendAsync(string token, string userId, string text, CancellationToken ct)
         {
             var url = $"{_apiBase.TrimEnd('/')}{_sendTextPath}";
             using var req = new HttpRequestMessage(HttpMethod.Post, url);
@@ -181,22 +190,61 @@ namespace ManageEmployee.Services.Chatbot
             using var res = await client.SendAsync(req, ct);
             var body = await res.Content.ReadAsStringAsync(ct);
 
-            if (res.IsSuccessStatusCode)
+            // 1) HTTP không 2xx → lỗi mạng/hệ thống
+            if (!res.IsSuccessStatusCode)
             {
-                _log.LogDebug("Zalo send OK -> {User}. Resp: {Body}", userId, body); // [CHANGED] log thành công
-                return true;
+                _log.LogWarning("Zalo sendText HTTP {Status}. Resp: {Body}. Payload: {Payload}",
+                    (int)res.StatusCode, body, json);
+
+                if (res.StatusCode == HttpStatusCode.Unauthorized || res.StatusCode == HttpStatusCode.Forbidden)
+                    return TrySendResult.ShouldRefresh;
+
+                return TrySendResult.Fail;
             }
 
-            // [CHANGED] log chi tiết mọi lỗi để dễ dò
-            _log.LogWarning("Zalo sendText fail {Status}. Resp: {Body}. Payload: {Payload}",
-                (int)res.StatusCode, body, json);
-
-            if (res.StatusCode == HttpStatusCode.Unauthorized || res.StatusCode == HttpStatusCode.Forbidden)
+            // 2) HTTP 200: phải kiểm tra "error" trong body
+            int error = 0;
+            string? message = null;
+            string? messageId = null;
+            try
             {
-                return false; // để caller refresh + retry
+                using var doc = JsonDocument.Parse(body);
+                var root = doc.RootElement;
+
+                if (root.TryGetProperty("error", out var e))
+                {
+                    error = e.ValueKind == JsonValueKind.Number
+                        ? e.GetInt32()
+                        : int.TryParse(e.GetString(), out var tmp) ? tmp : 0;
+                }
+                if (root.TryGetProperty("message", out var m)) message = m.GetString();
+                if (root.TryGetProperty("message_id", out var mid)) messageId = mid.GetString();
+            }
+            catch
+            {
+                // Body không phải JSON hợp lệ (hiếm)
+                _log.LogInformation("Zalo sendText HTTP 200 (non-JSON). Body: {Body}", body);
+                return TrySendResult.Success; // coi như OK để không chặn
             }
 
-            throw new($"Zalo sendText failed: {(int)res.StatusCode}");
+            if (error == 0)
+            {
+                _log.LogInformation("Zalo send OK -> {User}. message_id={MsgId}. Body: {Body}", userId, messageId, body);
+                return TrySendResult.Success;
+            }
+
+            // Lỗi nhưng HTTP 200 — ghi rõ & quyết định có nên refresh hay không
+            _log.LogWarning("Zalo send returned error={Error}, message={Msg}. Body: {Body}", error, message, body);
+
+            // heuristic: nếu lỗi có vẻ liên quan token → refresh
+            if ((message ?? "").Contains("access token", StringComparison.OrdinalIgnoreCase) ||
+                (message ?? "").Contains("expired", StringComparison.OrdinalIgnoreCase) ||
+                error == 401 || error == 403)
+            {
+                return TrySendResult.ShouldRefresh;
+            }
+
+            return TrySendResult.Fail;
         }
     }
 }

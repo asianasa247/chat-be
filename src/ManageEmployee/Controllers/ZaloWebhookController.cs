@@ -35,11 +35,11 @@ namespace ManageEmployee.Controllers
         {
             var method = HttpContext.Request.Method;
 
-            // 1) HEAD/OPTIONS: luôn 200
+            // 1) HEAD/OPTIONS (Zalo có thể gọi khi "Kiểm tra") => luôn 200
             if (method == HttpMethods.Head || method == HttpMethods.Options)
                 return Ok();
 
-            // 2) GET verify_token
+            // 2) GET verify_token => phải trùng với appsettings.json
             if (method == HttpMethods.Get)
             {
                 var token = Request.Query["verify_token"].ToString();
@@ -49,7 +49,7 @@ namespace ManageEmployee.Controllers
                 return ok ? Ok("OK") : Unauthorized();
             }
 
-            // 3) POST
+            // 3) POST: có thể rỗng khi "Kiểm tra" => vẫn 200
             if (Request.ContentLength == 0)
             {
                 _log.LogWarning("Zalo webhook POST empty body.");
@@ -57,10 +57,10 @@ namespace ManageEmployee.Controllers
             }
 
             string raw;
-            using (var sr = new StreamReader(Request.Body, Encoding.UTF8))
-                raw = await sr.ReadToEndAsync();
+            using (var reader = new StreamReader(Request.Body, Encoding.UTF8))
+                raw = await reader.ReadToEndAsync(); // KHÔNG truyền CancellationToken để tránh CS1501
 
-            // (Optional) verify signature nếu header có
+            // (Optional) verify signature nếu header có — không chặn khi sai
             try
             {
                 var sigHeader = Request.Headers["X-ZEvent-Signature"].ToString();
@@ -72,7 +72,12 @@ namespace ManageEmployee.Controllers
                         using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(appSecret));
                         var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(raw));
                         var hex = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
-                        var ok = string.Equals(hex, sigHeader, StringComparison.OrdinalIgnoreCase);
+
+                        var headerMac = sigHeader.StartsWith("mac=", StringComparison.OrdinalIgnoreCase)
+                            ? sigHeader.Substring(4)
+                            : sigHeader;
+
+                        var ok = string.Equals(hex, headerMac, StringComparison.OrdinalIgnoreCase);
                         if (!ok) _log.LogWarning("Zalo signature mismatch. header={Header} computed={Hex}", sigHeader, hex);
                     }
                 }
@@ -97,12 +102,14 @@ namespace ManageEmployee.Controllers
                 string? text = null;
                 if (root.TryGetProperty("message", out var msg))
                 {
-                    // Zalo chuẩn: message.text
                     if (msg.TryGetProperty("text", out var t)) text = t.GetString();
                 }
 
-                _log.LogInformation("Zalo webhook POST event={Event} sender={Sender} text={Text} body[200]={Body}",
-                    eventName, senderId, text, raw.Length > 200 ? raw.Substring(0, 200) + "..." : raw);
+                _log.LogInformation(
+                    "Zalo webhook POST event={Event} sender={Sender} text={Text} body[200]={Body}",
+                    eventName, senderId, text,
+                    raw.Length > 200 ? raw.Substring(0, 200) + "..." : raw
+                );
 
                 if (string.IsNullOrWhiteSpace(eventName) || string.IsNullOrWhiteSpace(senderId))
                     return Ok(new { ok = true });
@@ -128,7 +135,7 @@ namespace ManageEmployee.Controllers
             catch (Exception ex)
             {
                 _log.LogError(ex, "Webhook POST error. Raw={Raw}", raw);
-                // luôn trả 200 để Zalo không đánh fail webhook
+                // vẫn trả 200 để Zalo không đánh fail webhook
                 return Ok(new { ok = false, error = ex.Message });
             }
         }
