@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using ManageEmployee.DataTransferObject.Chatbot;
 using ManageEmployee.Services.Interfaces.Chatbot;
@@ -34,65 +35,114 @@ namespace ManageEmployee.Controllers
         {
             var method = HttpContext.Request.Method;
 
-            // 1) HEAD/OPTIONS (Zalo có thể gọi khi "Kiểm tra") => luôn 200
+            // 1) HEAD/OPTIONS: luôn 200
             if (method == HttpMethods.Head || method == HttpMethods.Options)
                 return Ok();
 
-            // 2) GET verify_token => phải trùng với appsettings.json
+            // 2) GET verify_token
             if (method == HttpMethods.Get)
             {
                 var token = Request.Query["verify_token"].ToString();
                 var expected = _cfg["Zalo:VerifyToken"];
-                return (!string.IsNullOrEmpty(expected) && token == expected) ? Ok("OK") : Unauthorized();
+                var ok = (!string.IsNullOrEmpty(expected) && token == expected);
+                _log.LogInformation("Zalo webhook GET verify_token={Token} => {Ok}", token, ok);
+                return ok ? Ok("OK") : Unauthorized();
             }
 
-            // 3) POST: có thể rỗng khi "Kiểm tra" => vẫn 200
-            if (method == HttpMethods.Post)
+            // 3) POST
+            if (Request.ContentLength == 0)
             {
-                try
+                _log.LogWarning("Zalo webhook POST empty body.");
+                return Ok(new { ok = true });
+            }
+
+            string raw;
+            using (var sr = new StreamReader(Request.Body, Encoding.UTF8))
+                raw = await sr.ReadToEndAsync();
+
+            // (Optional) verify signature nếu header có
+            try
+            {
+                var sigHeader = Request.Headers["X-ZEvent-Signature"].ToString();
+                if (!string.IsNullOrWhiteSpace(sigHeader))
                 {
-                    if (Request.ContentLength == 0)
-                        return Ok(new { ok = true });
-
-                    string body;
-                    using (var reader = new StreamReader(Request.Body, Encoding.UTF8))
-                        body = await reader.ReadToEndAsync(); // KHÔNG truyền CancellationToken để tránh CS1501
-
-                    if (string.IsNullOrWhiteSpace(body))
-                        return Ok(new { ok = true });
-
-                    ZaloWebhookPayload? payload = null;
-                    try
+                    var appSecret = _cfg["Zalo:AppSecret"];
+                    if (!string.IsNullOrWhiteSpace(appSecret))
                     {
-                        payload = JsonSerializer.Deserialize<ZaloWebhookPayload>(body,
-                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                        using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(appSecret));
+                        var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(raw));
+                        var hex = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+                        var ok = string.Equals(hex, sigHeader, StringComparison.OrdinalIgnoreCase);
+                        if (!ok) _log.LogWarning("Zalo signature mismatch. header={Header} computed={Hex}", sigHeader, hex);
                     }
-                    catch { /* body có thể không phải JSON, bỏ qua */ }
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.LogWarning(ex, "Zalo signature verify error (non-blocking).");
+            }
 
-                    if (payload == null || !string.Equals(payload.EventName, "user_send_text", StringComparison.OrdinalIgnoreCase))
-                        return Ok(new { ok = true });
+            try
+            {
+                // Parse linh hoạt (phủ cả user_send_text/image/link/sticker…)
+                using var doc = JsonDocument.Parse(raw);
+                var root = doc.RootElement;
 
-                    var userId = payload.Sender?.Id;
-                    var text = payload.Message?.Text ?? string.Empty;
-                    if (string.IsNullOrWhiteSpace(userId))
-                        return Ok(new { ok = true });
+                var eventName = root.TryGetProperty("event_name", out var ev)
+                    ? ev.GetString() : null;
 
-                    await _subs.AddAsync(userId, ct);
-                    var reply = await _chatbot.BuildReplyAsync(text, ct);
-                    await _zalo.SendTextAsync(userId, reply, ct);
+                var senderId = root.TryGetProperty("sender", out var s) && s.TryGetProperty("id", out var sid)
+                    ? sid.GetString() : null;
 
+                string? text = null;
+                if (root.TryGetProperty("message", out var msg))
+                {
+                    // Zalo chuẩn: message.text
+                    if (msg.TryGetProperty("text", out var t)) text = t.GetString();
+                }
+
+                _log.LogInformation("Zalo webhook POST event={Event} sender={Sender} text={Text} body[200]={Body}",
+                    eventName, senderId, text, raw.Length > 200 ? raw.Substring(0, 200) + "..." : raw);
+
+                if (string.IsNullOrWhiteSpace(eventName) || string.IsNullOrWhiteSpace(senderId))
+                    return Ok(new { ok = true });
+
+                // Chỉ xử lý nhóm user_send_* ; các sự kiện khác bỏ qua (follow, menu_click… tuỳ sau này)
+                if (!eventName.StartsWith("user_send_", StringComparison.OrdinalIgnoreCase))
+                    return Ok(new { ok = true });
+
+                await _subs.AddAsync(senderId, ct);
+
+                // Nếu không có text (sticker/image/link...) → nhắn nhủ người dùng gửi text
+                if (string.IsNullOrWhiteSpace(text))
+                {
+                    await SafeSendAsync(senderId, "Mình chưa đọc được loại tin nhắn này. Bạn thử gửi câu hỏi bằng chữ nhé.", ct);
                     return Ok(new { ok = true });
                 }
-                catch (Exception ex)
-                {
-                    _log.LogError(ex, "Webhook POST error");
-                    // vẫn trả 200 để Zalo không đánh fail webhook
-                    return Ok(new { ok = false, error = ex.Message });
-                }
-            }
 
-            // fallback
-            return Ok();
+                var reply = await _chatbot.BuildReplyAsync(text, ct);
+                await SafeSendAsync(senderId, reply, ct);
+
+                return Ok(new { ok = true });
+            }
+            catch (Exception ex)
+            {
+                _log.LogError(ex, "Webhook POST error. Raw={Raw}", raw);
+                // luôn trả 200 để Zalo không đánh fail webhook
+                return Ok(new { ok = false, error = ex.Message });
+            }
+        }
+
+        private async Task SafeSendAsync(string userId, string message, CancellationToken ct)
+        {
+            try
+            {
+                await _zalo.SendTextAsync(userId, message, ct);
+            }
+            catch (Exception ex)
+            {
+                _log.LogWarning(ex, "SendTextAsync failed for {User}", userId);
+            }
         }
     }
 }

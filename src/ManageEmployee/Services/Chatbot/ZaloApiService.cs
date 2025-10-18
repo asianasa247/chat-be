@@ -10,6 +10,7 @@ namespace ManageEmployee.Services.Chatbot
     /// - Đọc access token từ ITokenStore (file JSON).
     /// - Tự động refresh khi hết hạn (nếu cấu hình đầy đủ).
     /// - Retry 1 lần nếu gặp 401/403 do token hết hạn.
+    /// - Log chi tiết response từ Zalo để dễ debug.
     /// </summary>
     public sealed class ZaloApiService : IZaloApiService
     {
@@ -173,21 +174,28 @@ namespace ManageEmployee.Services.Chatbot
                 recipient = new { user_id = userId },
                 message = new { text }
             };
-            req.Content = new StringContent(JsonSerializer.Serialize(payload, _json), Encoding.UTF8, "application/json");
+            var json = JsonSerializer.Serialize(payload, _json);
+            req.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
             using var client = _http.CreateClient();
             using var res = await client.SendAsync(req, ct);
             var body = await res.Content.ReadAsStringAsync(ct);
 
-            if (res.IsSuccessStatusCode) return true;
+            if (res.IsSuccessStatusCode)
+            {
+                _log.LogDebug("Zalo send OK -> {User}. Resp: {Body}", userId, body); // [CHANGED] log thành công
+                return true;
+            }
+
+            // [CHANGED] log chi tiết mọi lỗi để dễ dò
+            _log.LogWarning("Zalo sendText fail {Status}. Resp: {Body}. Payload: {Payload}",
+                (int)res.StatusCode, body, json);
 
             if (res.StatusCode == HttpStatusCode.Unauthorized || res.StatusCode == HttpStatusCode.Forbidden)
             {
-                _log.LogWarning("Zalo sendText 401/403. Body: {Body}", body);
                 return false; // để caller refresh + retry
             }
 
-            _log.LogWarning("Zalo sendText fail {Status} {Body}", res.StatusCode, body);
             throw new($"Zalo sendText failed: {(int)res.StatusCode}");
         }
     }

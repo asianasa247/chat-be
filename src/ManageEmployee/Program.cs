@@ -88,6 +88,9 @@ builder.Services.AddHangfire((serviceProvider, hangfireConfiguration) =>
     hangfireConfiguration.UseSqlServerStorage(connectionString);
 });
 
+// [CHANGED] Bật Hangfire Server để các recurring job thực sự chạy
+builder.Services.AddHangfireServer();
+
 builder.Services.AddCors(x =>
     x.AddPolicy("AllowAll", b => b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
 
@@ -292,7 +295,7 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseRouting();
 app.UseCors("AllowAll");
 
-app.UseHangfireDashboard();
+app.UseHangfireDashboard(); // Dashboard
 app.UseAuthentication();
 app.UseAuthorization();
 
