@@ -1,7 +1,6 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using ManageEmployee.DataTransferObject.Chatbot;
 using ManageEmployee.Services.Interfaces.Chatbot;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -89,7 +88,6 @@ namespace ManageEmployee.Controllers
 
             try
             {
-                // Parse linh hoạt (phủ cả user_send_text/image/link/sticker…)
                 using var doc = JsonDocument.Parse(raw);
                 var root = doc.RootElement;
 
@@ -114,7 +112,7 @@ namespace ManageEmployee.Controllers
                 if (string.IsNullOrWhiteSpace(eventName) || string.IsNullOrWhiteSpace(senderId))
                     return Ok(new { ok = true });
 
-                // Chỉ xử lý nhóm user_send_* ; các sự kiện khác bỏ qua (follow, menu_click… tuỳ sau này)
+                // Chỉ xử lý nhóm user_send_* ; các sự kiện khác bỏ qua
                 if (!eventName.StartsWith("user_send_", StringComparison.OrdinalIgnoreCase))
                     return Ok(new { ok = true });
 
@@ -127,7 +125,8 @@ namespace ManageEmployee.Controllers
                     return Ok(new { ok = true });
                 }
 
-                var reply = await _chatbot.BuildReplyAsync(text, ct);
+                // >>>> TRỌNG TÂM: truyền userId vào chatbot để giữ state
+                var reply = await _chatbot.BuildReplyAsync(senderId, text, ct);
                 await SafeSendAsync(senderId, reply, ct);
 
                 return Ok(new { ok = true });
