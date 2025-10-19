@@ -118,14 +118,13 @@ namespace ManageEmployee.Controllers
 
                 await _subs.AddAsync(senderId, ct);
 
-                // Nếu không có text (sticker/image/link...) → nhắn nhủ người dùng gửi text
                 if (string.IsNullOrWhiteSpace(text))
                 {
                     await SafeSendAsync(senderId, "Mình chưa đọc được loại tin nhắn này. Bạn thử gửi câu hỏi bằng chữ nhé.", ct);
                     return Ok(new { ok = true });
                 }
 
-                // >>>> TRỌNG TÂM: truyền userId vào chatbot để giữ state
+                // QUAN TRỌNG: truyền kèm userId để quản lý state
                 var reply = await _chatbot.BuildReplyAsync(senderId, text, ct);
                 await SafeSendAsync(senderId, reply, ct);
 
@@ -134,7 +133,6 @@ namespace ManageEmployee.Controllers
             catch (Exception ex)
             {
                 _log.LogError(ex, "Webhook POST error. Raw={Raw}", raw);
-                // vẫn trả 200 để Zalo không đánh fail webhook
                 return Ok(new { ok = false, error = ex.Message });
             }
         }

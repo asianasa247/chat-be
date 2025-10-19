@@ -7,77 +7,62 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace ManageEmployee.Services.Chatbot
 {
-    /// <summary>
-    /// Flow chính:
-    ///  - Nếu chưa có state hoặc user gõ "menu/chủ đề/bắt đầu/start/help" => hiển thị MENU CHỦ ĐỀ (từ ChatboxAITopics)
-    ///  - awaiting_topic:
-    ///     + Người dùng gõ SỐ (1..n) hoặc TÊN chủ đề => chuyển sang awaiting_question + hiển thị danh sách câu hỏi (ChatboxAIQAs)
-    ///  - awaiting_question:
-    ///     + Người dùng gõ SỐ (1..n) hoặc trích nội dung => trả lời Answer tương ứng
-    ///  - Ở mọi nơi: nếu không khớp lựa chọn => thử fallback theo companyInfo.json; nếu vẫn không có => nhắc lại cách gõ.
-    /// </summary>
+    /// Flow mới:
+    /// - Luôn có "chọn chủ đề" / "chọn lại chủ đề" / "menu|start|help" để quay về Topic Menu.
+    /// - Khi chọn 1 chủ đề: hiển thị danh sách câu hỏi (QA) của chủ đề đó.
+    /// - Khi chọn câu hỏi: trả lời Answer + hiển thị lại danh sách câu hỏi.
+    /// - Fallback: nếu không hiểu, ưu tiên trả lời nhanh từ CompanyInfo; nếu vẫn không, nhắc lại menu tương ứng.
+    /// - Hoàn toàn bỏ "[AUTO]" khỏi mọi message.
     public sealed class ZaloChatbotService : IZaloChatbotService
     {
         private readonly ICompanyInfoService _company;
+        private readonly IGeminiNlpService _gemini; // hiện không dùng nhưng giữ DI cho ổn định
         private readonly IConfiguration _cfg;
         private readonly ApplicationDbContext _db;
         private readonly IMemoryCache _cache;
-        private readonly ILogger<ZaloChatbotService> _log;
 
         public ZaloChatbotService(
             ICompanyInfoService company,
+            IGeminiNlpService gemini,
             IConfiguration cfg,
             ApplicationDbContext db,
-            IMemoryCache cache,
-            ILogger<ZaloChatbotService> log)
+            IMemoryCache cache)
         {
             _company = company;
+            _gemini = gemini;
             _cfg = cfg;
             _db = db;
             _cache = cache;
-            _log = log;
         }
 
-        private enum Stage { AwaitingTopic, AwaitingQuestion }
-
-        private sealed class TopicItem
+        // ==== State trong cache ====
+        private record IdName(int Id, string Name);
+        private sealed class ChatState
         {
-            public int Id { get; init; }
-            public string Name { get; init; } = "";
-        }
-
-        private sealed class QaItem
-        {
-            public int Id { get; init; }
-            public string Question { get; init; } = "";
-            public string Answer { get; init; } = "";
-        }
-
-        private sealed class UserState
-        {
-            public Stage Stage { get; set; } = Stage.AwaitingTopic;
             public int? TopicId { get; set; }
             public string? TopicName { get; set; }
-            public List<TopicItem> Topics { get; set; } = new();
-            public List<QaItem> QAs { get; set; } = new();
+            public List<IdName> CachedTopics { get; set; } = new();
+            public List<IdName> CachedQuestions { get; set; } = new();
             public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
         }
 
-        private static string CacheKey(string userId) => "chatbot.state:" + userId;
+        private ChatState GetState(string userId)
+            => _cache.GetOrCreate($"zalo.chat.state.{userId}", e =>
+            {
+                e.SlidingExpiration = TimeSpan.FromMinutes(30);
+                return new ChatState();
+            })!;
 
-        private void SaveState(string userId, UserState st)
+        private void SaveState(string userId, ChatState st)
         {
             st.UpdatedAt = DateTimeOffset.UtcNow;
-            _cache.Set(CacheKey(userId), st, new MemoryCacheEntryOptions
+            _cache.Set($"zalo.chat.state.{userId}", st, new MemoryCacheEntryOptions
             {
-                SlidingExpiration = TimeSpan.FromMinutes(30),
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(12)
+                SlidingExpiration = TimeSpan.FromMinutes(30)
             });
         }
 
-        private bool TryGetState(string userId, out UserState st)
-            => _cache.TryGetValue(CacheKey(userId), out st!);
-
+        // ==== Utils ====
         private static string Normalize(string s)
         {
             s = s.ToLowerInvariant();
@@ -87,236 +72,203 @@ namespace ManageEmployee.Services.Chatbot
             return s;
         }
 
-        private static bool IsMenuTrigger(string textNorm)
+        private static bool IsBackToTopics(string norm)
         {
-            var t = textNorm;
-            return t.Contains("menu") ||
-                   t.Contains("chu de") ||
-                   t.Contains("chude") ||
-                   t.Contains("bat dau") ||
-                   t.Contains("batdau") ||
-                   t.Contains("start") ||
-                   t.Contains("help") ||
-                   t == "?" || t == "bắt đầu" || t == "chủ đề";
+            // các lệnh về Menu
+            return norm is "menu" or "start" or "help"
+                || norm.Contains("chon chu de")
+                || norm.Contains("chọn chủ đề")
+                || norm.Contains("chon lai chu de")
+                || norm.Contains("chọn lại chủ đề")
+                || norm.Contains("quay lai") || norm.Contains("quay lại");
         }
 
-        private static bool TryPickNumberStrict(string raw, out int index)
+        // ==== Build menu text ====
+        private async Task<(string Text, List<IdName> Topics)> BuildTopicMenuAsync(CancellationToken ct)
         {
-            index = 0;
-            var trimmed = raw.Trim();
-            if (!Regex.IsMatch(trimmed, @"^\d{1,3}(\.|:|\)|\s)?$")) return false;
-            var m = Regex.Match(trimmed, @"\d+");
-            if (!m.Success) return false;
-            if (!int.TryParse(m.Value, out index)) return false;
-            return true;
-        }
-
-        private async Task<List<TopicItem>> LoadTopicsAsync(CancellationToken ct)
-        {
-            var list = await _db.ChatboxAITopics
+            var topics = await _db.ChatboxAITopics
                 .AsNoTracking()
                 .OrderBy(x => x.Id)
-                .Select(x => new TopicItem { Id = x.Id, Name = x.TopicName })
+                .Select(x => new IdName(x.Id, x.TopicName))
                 .ToListAsync(ct);
 
-            return list;
-        }
-
-        private async Task<List<QaItem>> LoadQAsAsync(int topicId, CancellationToken ct)
-        {
-            var list = await _db.ChatboxAIQAs
-                .AsNoTracking()
-                .Where(x => x.TopicId == topicId)
-                .OrderBy(x => x.Id)
-                .Select(x => new QaItem { Id = x.Id, Question = x.Question, Answer = x.Answer })
-                .ToListAsync(ct);
-
-            return list;
-        }
-
-        private string BuildTopicMenu(List<TopicItem> topics)
-        {
             var sb = new StringBuilder();
             sb.AppendLine("✨AI của JW Kim thông minh nhất😄");
             sb.AppendLine();
             sb.AppendLine("Mình chưa nhận ra chủ đề bạn chọn. Vui lòng gõ **số** hoặc **tên** chủ đề.");
             sb.AppendLine();
 
-            if (topics.Count == 0)
-            {
-                sb.AppendLine("_Hiện chưa có chủ đề nào. Vui lòng quay lại sau._");
-                return WithPrefix(sb.ToString());
-            }
-
             for (int i = 0; i < topics.Count; i++)
-            {
                 sb.AppendLine($"{i + 1}. {topics[i].Name}");
-            }
 
             sb.AppendLine();
-            sb.AppendLine("💞Vui lòng \"Gõ số hoặc tên\" nhé:");
-            return WithPrefix(sb.ToString());
+            sb.Append("💞Vui lòng \"Gõ số hoặc tên\" nhé:");
+            return (sb.ToString(), topics);
         }
 
-        private string BuildQaMenu(string topicName, List<QaItem> qas)
+        private async Task<(string Text, List<IdName> Questions, string TopicName)> BuildQuestionMenuAsync(int topicId, CancellationToken ct)
         {
+            var topic = await _db.ChatboxAITopics.AsNoTracking().FirstOrDefaultAsync(x => x.Id == topicId, ct);
+            var tName = topic?.TopicName ?? "Chủ đề";
+
+            var qas = await _db.ChatboxAIQAs
+                .AsNoTracking()
+                .Where(x => x.TopicId == topicId)
+                .OrderBy(x => x.Id)
+                .Select(x => new IdName(x.Id, x.Question))
+                .ToListAsync(ct);
+
             var sb = new StringBuilder();
             sb.AppendLine("Đây là tin nhắn tự động của chatbot.");
             sb.AppendLine();
-            sb.AppendLine($"Chủ đề: **{topicName}**");
+            sb.AppendLine($"Chủ đề: **{tName}**");
             sb.AppendLine("Chọn **Câu hỏi** (gõ số hoặc trích nội dung):");
             sb.AppendLine();
 
-            if (qas.Count == 0)
-            {
-                sb.AppendLine("_Chủ đề này hiện chưa có câu hỏi nào._");
-                sb.AppendLine();
-                sb.AppendLine("Gõ **menu** để chọn chủ đề khác.");
-                return WithPrefix(sb.ToString());
-            }
-
             for (int i = 0; i < qas.Count; i++)
-            {
-                sb.AppendLine($"{i + 1}. {qas[i].Question}");
-            }
-            return WithPrefix(sb.ToString());
+                sb.AppendLine($"{i + 1}. {qas[i].Name}");
+
+            sb.AppendLine();
+            sb.Append("Nếu muốn chọn chủ đề khác, vui lòng gõ \"chọn chủ đề\".");
+
+            return (sb.ToString(), qas, tName);
         }
 
-        private string WithPrefix(string msg)
+        // ==== Parse selection helpers ====
+        private static int? TryParseIndex(string norm)
         {
-            var prefix = _cfg["Chatbot:AutoPrefix"] ?? "";
-            return string.IsNullOrEmpty(prefix) ? msg : prefix + msg;
+            // nếu người dùng chỉ gõ số
+            if (int.TryParse(norm, out var n) && n > 0) return n;
+            // nếu có dạng "1." hoặc "1 -"...
+            var m = Regex.Match(norm, @"^(\d+)[\.\-\)]");
+            if (m.Success && int.TryParse(m.Groups[1].Value, out var k) && k > 0) return k;
+            return null;
         }
 
+        private static int? MatchByIndexOrName(string inputNorm, List<IdName> items)
+        {
+            // 1) thử theo số thứ tự
+            var idx = TryParseIndex(inputNorm);
+            if (idx.HasValue && idx.Value <= items.Count) return items[idx.Value - 1].Id;
+
+            // 2) theo tên (chứa)
+            var match = items.FirstOrDefault(it => Normalize(it.Name).Contains(inputNorm) || inputNorm.Contains(Normalize(it.Name)));
+            return match?.Id;
+        }
+
+        // ==== Core ====
         public async Task<string> BuildReplyAsync(string userId, string userText, CancellationToken ct = default)
         {
-            userText ??= "";
-            var textNorm = Normalize(userText);
+            var st = GetState(userId);
+            var info = await _company.LoadAsync(ct);
+            var norm = Normalize(userText ?? "");
 
-            // Lấy thông tin công ty (phục vụ fallback nhanh)
-            var company = await _company.LoadAsync(ct);
-
-            // Trường hợp người dùng yêu cầu MENU / bắt đầu lại
-            if (IsMenuTrigger(textNorm) || !TryGetState(userId, out var state))
+            // Lệnh quay về menu chủ đề
+            if (IsBackToTopics(norm))
             {
-                var topics = await LoadTopicsAsync(ct);
-                var fresh = new UserState
-                {
-                    Stage = Stage.AwaitingTopic,
-                    Topics = topics,
-                    TopicId = null,
-                    TopicName = null,
-                    QAs = new()
-                };
-                SaveState(userId, fresh);
-                return BuildTopicMenu(topics);
+                st.TopicId = null;
+                st.TopicName = null;
+                var (menu, topics) = await BuildTopicMenuAsync(ct);
+                st.CachedTopics = topics;
+                st.CachedQuestions = new();
+                SaveState(userId, st);
+                return menu;
             }
 
-            // ====== ĐANG Ở TRẠNG THÁI CHỌN CHỦ ĐỀ ======
-            if (state.Stage == Stage.AwaitingTopic)
+            // === Nếu chưa chọn chủ đề → hiển thị & chọn chủ đề ===
+            if (st.TopicId is null)
             {
-                // Đảm bảo đã có danh sách topics
-                if (state.Topics.Count == 0)
-                    state.Topics = await LoadTopicsAsync(ct);
-
-                // Thử match theo SỐ
-                if (TryPickNumberStrict(userText, out var idx))
+                // nếu chưa cache, build menu
+                if (st.CachedTopics.Count == 0)
                 {
-                    if (idx >= 1 && idx <= state.Topics.Count)
+                    var (menu, topics) = await BuildTopicMenuAsync(ct);
+                    st.CachedTopics = topics;
+                    SaveState(userId, st);
+
+                    // nếu userText gõ gì đó không map được, trả luôn menu
+                    var chosenTopicId = MatchByIndexOrName(norm, topics);
+                    if (chosenTopicId is null) return menu;
+
+                    // chọn được topic ngay lần đầu
+                    st.TopicId = chosenTopicId;
+                    var (qMenu, qList, tName) = await BuildQuestionMenuAsync(st.TopicId.Value, ct);
+                    st.TopicName = tName;
+                    st.CachedQuestions = qList;
+                    SaveState(userId, st);
+                    return qMenu;
+                }
+                else
+                {
+                    // đã có cache topics → cố gắng map lựa chọn
+                    var chosenTopicId = MatchByIndexOrName(norm, st.CachedTopics);
+                    if (chosenTopicId is null)
                     {
-                        var pick = state.Topics[idx - 1];
-                        state.TopicId = pick.Id;
-                        state.TopicName = pick.Name;
-                        state.QAs = await LoadQAsAsync(pick.Id, ct);
-                        state.Stage = Stage.AwaitingQuestion;
-                        SaveState(userId, state);
-                        return BuildQaMenu(pick.Name, state.QAs);
+                        var (menu, topics) = await BuildTopicMenuAsync(ct);
+                        st.CachedTopics = topics;
+                        SaveState(userId, st);
+                        return menu;
                     }
+
+                    st.TopicId = chosenTopicId;
+                    var (qMenu, qList, tName) = await BuildQuestionMenuAsync(st.TopicId.Value, ct);
+                    st.TopicName = tName;
+                    st.CachedQuestions = qList;
+                    SaveState(userId, st);
+                    return qMenu;
                 }
-
-                // Thử match theo TÊN (accent-insensitive)
-                var match = state.Topics.FirstOrDefault(t =>
-                {
-                    var tn = Normalize(t.Name);
-                    return tn.Contains(textNorm) || textNorm.Contains(tn);
-                });
-
-                if (match != null)
-                {
-                    state.TopicId = match.Id;
-                    state.TopicName = match.Name;
-                    state.QAs = await LoadQAsAsync(match.Id, ct);
-                    state.Stage = Stage.AwaitingQuestion;
-                    SaveState(userId, state);
-                    return BuildQaMenu(match.Name, state.QAs);
-                }
-
-                // Không chọn được => fallback nhanh theo company info?
-                var quick = _company.QuickAnswer(company, userText);
-                if (!string.IsNullOrWhiteSpace(quick))
-                {
-                    // Giữ nguyên stage và nhắc lại menu để user chọn tiếp
-                    var ans = new StringBuilder();
-                    ans.AppendLine(quick);
-                    ans.AppendLine();
-                    ans.Append(BuildTopicMenu(state.Topics));
-                    return WithPrefix(ans.ToString());
-                }
-
-                // Nhắc lại menu chủ đề
-                SaveState(userId, state);
-                return BuildTopicMenu(state.Topics);
             }
 
-            // ====== ĐANG Ở TRẠNG THÁI CHỌN CÂU HỎI ======
-            if (state.Stage == Stage.AwaitingQuestion && state.TopicId.HasValue)
+            // === Đã có chủ đề → chọn câu hỏi & trả lời ===
+            // Cố gắng đồng bộ danh sách câu hỏi
+            if (st.CachedQuestions.Count == 0)
             {
-                // Bảo toàn list câu hỏi
-                if (state.QAs.Count == 0)
-                    state.QAs = await LoadQAsAsync(state.TopicId.Value, ct);
-
-                // SỐ
-                if (TryPickNumberStrict(userText, out var idx))
-                {
-                    if (idx >= 1 && idx <= state.QAs.Count)
-                    {
-                        var qa = state.QAs[idx - 1];
-                        SaveState(userId, state); // giữ state để hỏi thêm
-                        return WithPrefix(qa.Answer);
-                    }
-                }
-
-                // TRÍCH NỘI DUNG
-                var pick = state.QAs.FirstOrDefault(q =>
-                {
-                    var qn = Normalize(q.Question);
-                    return qn.Contains(textNorm) || textNorm.Contains(qn);
-                });
-
-                if (pick != null)
-                {
-                    SaveState(userId, state);
-                    return WithPrefix(pick.Answer);
-                }
-
-                // Fallback theo companyInfo.json
-                var quick = _company.QuickAnswer(company, userText);
-                if (!string.IsNullOrWhiteSpace(quick))
-                {
-                    SaveState(userId, state);
-                    return WithPrefix(quick);
-                }
-
-                // Không khớp gì => nhắc lại menu câu hỏi
-                SaveState(userId, state);
-                return BuildQaMenu(state.TopicName ?? "Chủ đề", state.QAs);
+                var (_, qList, tName) = await BuildQuestionMenuAsync(st.TopicId!.Value, ct);
+                st.TopicName = tName;
+                st.CachedQuestions = qList;
+                SaveState(userId, st);
             }
 
-            // Nếu vì lý do gì state lệch, reset về topic menu
-            var topicsReset = await LoadTopicsAsync(ct);
-            var reset = new UserState { Stage = Stage.AwaitingTopic, Topics = topicsReset };
-            SaveState(userId, reset);
-            return BuildTopicMenu(topicsReset);
+            var chosenQaId = MatchByIndexOrName(norm, st.CachedQuestions);
+            if (chosenQaId is not null)
+            {
+                var qa = await _db.ChatboxAIQAs.AsNoTracking()
+                    .Where(x => x.Id == chosenQaId.Value)
+                    .Select(x => new { x.Question, x.Answer, x.TopicId })
+                    .FirstOrDefaultAsync(ct);
+
+                if (qa is not null)
+                {
+                    // Sau khi trả lời, hiển thị lại menu câu hỏi
+                    var (qMenu, qList, tName) = await BuildQuestionMenuAsync(qa.TopicId, ct);
+                    st.TopicId = qa.TopicId;
+                    st.TopicName = tName;
+                    st.CachedQuestions = qList;
+                    SaveState(userId, st);
+
+                    var sb = new StringBuilder();
+                    sb.AppendLine(qa.Answer?.Trim() ?? "");
+                    sb.AppendLine();
+                    sb.Append(qMenu);
+                    return sb.ToString();
+                }
+            }
+
+            // Fallback trong phạm vi chủ đề: thử trả lời nhanh từ CompanyInfo
+            var quick = _company.QuickAnswer(info, userText);
+            if (!string.IsNullOrWhiteSpace(quick))
+            {
+                var (qMenu, _, _) = await BuildQuestionMenuAsync(st.TopicId!.Value, ct);
+                return quick + "\n\n" + qMenu;
+            }
+
+            // Không nhận ra: nhắc lại danh sách câu hỏi & hướng dẫn chọn chủ đề
+            {
+                var (qMenu, qList, tName) = await BuildQuestionMenuAsync(st.TopicId!.Value, ct);
+                st.TopicName = tName;
+                st.CachedQuestions = qList;
+                SaveState(userId, st);
+                return "Mình chưa nhận ra câu hỏi. Bạn vui lòng **gõ số** hoặc **trích nội dung** của câu hỏi nhé.\n\n" + qMenu;
+            }
         }
     }
 }
