@@ -30,42 +30,42 @@ namespace ManageEmployee.Controllers
 
         // NHẬN TẤT CẢ VERB để tránh 405 khi Zalo "Kiểm tra"
         [HttpGet, HttpPost, HttpHead, HttpOptions]
-        public async Task<IActionResult> Entry(CancellationToken ct)
+        public async Task<IActionResult> Entry(string appCode, CancellationToken ct)
         {
             var method = HttpContext.Request.Method;
 
-            // 1) HEAD/OPTIONS (Zalo có thể gọi khi "Kiểm tra") => luôn 200
             if (method == HttpMethods.Head || method == HttpMethods.Options)
                 return Ok();
 
-            // 2) GET verify_token => phải trùng với appsettings.json
             if (method == HttpMethods.Get)
             {
                 var token = Request.Query["verify_token"].ToString();
-                var expected = _cfg["Zalo:VerifyToken"];
+                var expected = _cfg["Zalo:VerifyToken"]; // Có thể dùng chung giữa các app
                 var ok = (!string.IsNullOrEmpty(expected) && token == expected);
-                _log.LogInformation("Zalo webhook GET verify_token={Token} => {Ok}", token, ok);
+                _log.LogInformation("Zalo webhook GET verify_token={Token}, app={App} => {Ok}", token, appCode, ok);
                 return ok ? Ok("OK") : Unauthorized();
             }
 
-            // 3) POST: có thể rỗng khi "Kiểm tra" => vẫn 200
             if (Request.ContentLength == 0)
             {
-                _log.LogWarning("Zalo webhook POST empty body.");
+                _log.LogWarning("Zalo webhook POST empty body (app={App}).", appCode);
                 return Ok(new { ok = true });
             }
 
             string raw;
             using (var reader = new StreamReader(Request.Body, Encoding.UTF8))
-                raw = await reader.ReadToEndAsync(); // KHÔNG truyền CancellationToken để tránh CS1501
+                raw = await reader.ReadToEndAsync();
 
-            // (Optional) verify signature nếu header có — không chặn khi sai
+            // (Optional) verify signature theo AppSecret của appCode
             try
             {
                 var sigHeader = Request.Headers["X-ZEvent-Signature"].ToString();
                 if (!string.IsNullOrWhiteSpace(sigHeader))
                 {
-                    var appSecret = _cfg["Zalo:AppSecret"];
+                    var appSecret = _cfg.GetSection("Zalo:Apps").GetChildren()
+                        .FirstOrDefault(s => string.Equals(s["Code"], appCode, StringComparison.OrdinalIgnoreCase))?["AppSecret"]
+                        ?? _cfg["Zalo:AppSecret"];
+
                     if (!string.IsNullOrWhiteSpace(appSecret))
                     {
                         using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(appSecret));
@@ -77,13 +77,13 @@ namespace ManageEmployee.Controllers
                             : sigHeader;
 
                         var ok = string.Equals(hex, headerMac, StringComparison.OrdinalIgnoreCase);
-                        if (!ok) _log.LogWarning("Zalo signature mismatch. header={Header} computed={Hex}", sigHeader, hex);
+                        if (!ok) _log.LogWarning("Signature mismatch (app={App}). header={Header} computed={Hex}", appCode, sigHeader, hex);
                     }
                 }
             }
             catch (Exception ex)
             {
-                _log.LogWarning(ex, "Zalo signature verify error (non-blocking).");
+                _log.LogWarning(ex, "Signature verify error (non-blocking, app={App}).", appCode);
             }
 
             try
@@ -91,11 +91,8 @@ namespace ManageEmployee.Controllers
                 using var doc = JsonDocument.Parse(raw);
                 var root = doc.RootElement;
 
-                var eventName = root.TryGetProperty("event_name", out var ev)
-                    ? ev.GetString() : null;
-
-                var senderId = root.TryGetProperty("sender", out var s) && s.TryGetProperty("id", out var sid)
-                    ? sid.GetString() : null;
+                var eventName = root.TryGetProperty("event_name", out var ev) ? ev.GetString() : null;
+                var senderId = root.TryGetProperty("sender", out var s) && s.TryGetProperty("id", out var sid) ? sid.GetString() : null;
 
                 string? text = null;
                 if (root.TryGetProperty("message", out var msg))
@@ -103,50 +100,46 @@ namespace ManageEmployee.Controllers
                     if (msg.TryGetProperty("text", out var t)) text = t.GetString();
                 }
 
-                _log.LogInformation(
-                    "Zalo webhook POST event={Event} sender={Sender} text={Text} body[200]={Body}",
-                    eventName, senderId, text,
-                    raw.Length > 200 ? raw.Substring(0, 200) + "..." : raw
-                );
+                _log.LogInformation("Webhook POST app={App} event={Event} sender={Sender} text={Text}", appCode, eventName, senderId, text);
 
                 if (string.IsNullOrWhiteSpace(eventName) || string.IsNullOrWhiteSpace(senderId))
                     return Ok(new { ok = true });
 
-                // Chỉ xử lý nhóm user_send_* ; các sự kiện khác bỏ qua
                 if (!eventName.StartsWith("user_send_", StringComparison.OrdinalIgnoreCase))
                     return Ok(new { ok = true });
 
-                await _subs.AddAsync(senderId, ct);
+                await _subs.AddAsync(appCode, senderId, ct);
 
                 if (string.IsNullOrWhiteSpace(text))
                 {
-                    await SafeSendAsync(senderId, "Mình chưa đọc được loại tin nhắn này. Bạn thử gửi câu hỏi bằng chữ nhé.", ct);
+                    await SafeSendAsync(appCode, senderId, "Mình chưa đọc được loại tin nhắn này. Bạn thử gửi câu hỏi bằng chữ nhé.", ct);
                     return Ok(new { ok = true });
                 }
 
-                // QUAN TRỌNG: truyền kèm userId để quản lý state
-                var reply = await _chatbot.BuildReplyAsync(senderId, text, ct);
-                await SafeSendAsync(senderId, reply, ct);
+                var reply = await _chatbot.BuildReplyAsync(senderId, text, ct); // logic QA giữ nguyên
+                await SafeSendAsync(appCode, senderId, reply, ct);
 
                 return Ok(new { ok = true });
             }
             catch (Exception ex)
             {
-                _log.LogError(ex, "Webhook POST error. Raw={Raw}", raw);
+                _log.LogError(ex, "Webhook POST error (app={App}). Raw={Raw}", appCode, raw);
                 return Ok(new { ok = false, error = ex.Message });
             }
         }
 
-        private async Task SafeSendAsync(string userId, string message, CancellationToken ct)
+        // ====== REPLACE SafeSendAsync để nhận appCode ======
+        private async Task SafeSendAsync(string appCode, string userId, string message, CancellationToken ct)
         {
             try
             {
-                await _zalo.SendTextAsync(userId, message, ct);
+                await _zalo.SendTextAsync(appCode, userId, message, ct);
             }
             catch (Exception ex)
             {
-                _log.LogWarning(ex, "SendTextAsync failed for {User}", userId);
+                _log.LogWarning(ex, "SendTextAsync failed for {User} (app={App})", userId, appCode);
             }
         }
     }
+
 }

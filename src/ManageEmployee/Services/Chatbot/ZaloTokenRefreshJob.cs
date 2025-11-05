@@ -1,19 +1,21 @@
-﻿using ManageEmployee.Services.Chatbot;
+﻿using ManageEmployee.Services.Interfaces.Chatbot;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ManageEmployee.Services.Chatbot
 {
     /// <summary>
-    /// Job Hangfire gọi đảm bảo token luôn hợp lệ (gọi EnsureAccessTokenAsync gián tiếp).
+    /// Job Hangfire: pre-warm/refresh token cho tất cả app trong Zalo:Apps.
+    /// Backward compatible: nếu không có Apps -> chạy app "default" (cấu hình cũ).
     /// </summary>
     public sealed class ZaloTokenRefreshJob
     {
         private readonly IServiceProvider _sp;
         private readonly ILogger<ZaloTokenRefreshJob> _log;
+        private readonly IConfiguration _cfg;
 
-        public ZaloTokenRefreshJob(IServiceProvider sp, ILogger<ZaloTokenRefreshJob> log)
+        public ZaloTokenRefreshJob(IServiceProvider sp, ILogger<ZaloTokenRefreshJob> log, IConfiguration cfg)
         {
-            _sp = sp; _log = log;
+            _sp = sp; _log = log; _cfg = cfg;
         }
 
         public async Task RunAsync(CancellationToken ct = default)
@@ -21,16 +23,23 @@ namespace ManageEmployee.Services.Chatbot
             try
             {
                 using var scope = _sp.CreateScope();
-                var api = scope.ServiceProvider.GetRequiredService<ZaloApiService>();
+                var api = scope.ServiceProvider.GetRequiredService<IZaloApiService>();
 
-                // Hack nho nhỏ: gọi public SendTextAsync với userId giả? Không nên.
-                // Thay vào đó, gọi EnsureAccessTokenAsync qua reflection để pre-warm.
-                var mi = typeof(ZaloApiService).GetMethod("EnsureAccessTokenAsync",
-                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                if (mi != null)
+                var hasAny = false;
+                foreach (var a in _cfg.GetSection("Zalo:Apps").GetChildren())
                 {
-                    var task = (Task)mi.Invoke(api, new object?[] { ct })!;
-                    await task.ConfigureAwait(false);
+                    var code = a["Code"];
+                    if (!string.IsNullOrWhiteSpace(code))
+                    {
+                        hasAny = true;
+                        await api.EnsureAccessTokenAsync(code!, ct);
+                    }
+                }
+
+                // Fallback single-app
+                if (!hasAny)
+                {
+                    await api.EnsureAccessTokenAsync("default", ct);
                 }
             }
             catch (Exception ex)

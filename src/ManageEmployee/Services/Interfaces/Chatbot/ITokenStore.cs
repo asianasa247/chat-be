@@ -4,8 +4,9 @@ namespace ManageEmployee.Services.Interfaces.Chatbot
 {
     public interface ITokenStore
     {
-        Task<ZaloTokens?> LoadAsync(CancellationToken ct = default);
-        Task SaveAsync(ZaloTokens tokens, CancellationToken ct = default);
+        // NEW: đa-app theo appCode
+        Task<ZaloTokens?> LoadAsync(string appCode, CancellationToken ct = default);
+        Task SaveAsync(string appCode, ZaloTokens tokens, CancellationToken ct = default);
         bool IsExpired(ZaloTokens tokens, int skewSeconds = 60);
     }
 }
