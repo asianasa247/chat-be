@@ -33,74 +33,86 @@ namespace ManageEmployee.Controllers
             _log = log;
         }
 
-        // GET https://ql.asianasa.com/api/zalo/oauth/start
-        [HttpGet("start")]
-        public IActionResult Start()
+        // =========================
+        // MULTI-APP OAUTH FLOW
+        // - Start:   GET /api/zalo/oauth/{appCode}/start
+        // - Callback:GET /api/zalo/oauth/{appCode}/callback?code=...&state=...
+        // Giữ nguyên logic PKCE + fallback legacy, nhưng tất cả đều theo từng appCode.
+        // =========================
+
+        // GET .../api/zalo/oauth/{appCode}/start
+        [HttpGet("{appCode}/start")]
+        public IActionResult Start([FromRoute] string appCode)
         {
-            var appId = _cfg["Zalo:AppId"];
-            var cb = Url.ActionLink(nameof(Callback), values: null)!;
-            if (string.IsNullOrWhiteSpace(appId))
-                return BadRequest("Missing Zalo:AppId in appsettings.");
+            if (string.IsNullOrWhiteSpace(appCode)) return BadRequest("Missing appCode");
+
+            var app = GetAppCfg(appCode);
+            if (string.IsNullOrWhiteSpace(app.AppId))
+                return BadRequest($"Missing AppId for appCode '{appCode}' in appsettings.");
+
+            var callbackUrl = Url.ActionLink(nameof(Callback), values: new { appCode })!;
+            var permissionBase = _cfg["Zalo:PermissionEndpoint"] ?? "https://oauth.zaloapp.com/v4/oa/permission";
 
             // PKCE
             var state = Guid.NewGuid().ToString("N");
             var codeVerifier = GenerateCodeVerifier();
             var codeChallenge = GenerateCodeChallenge(codeVerifier);
 
-            _cache.Set("zalo.pkce." + state, codeVerifier, TimeSpan.FromMinutes(10));
+            // Cache PKCE theo appCode để tránh va chạm khi nhiều app cùng authorize
+            _cache.Set($"zalo.pkce.{appCode}.{state}", codeVerifier, TimeSpan.FromMinutes(10));
 
-            var permissionBase = _cfg["Zalo:PermissionEndpoint"] ?? "https://oauth.zaloapp.com/v4/oa/permission";
-            var url = $"{permissionBase}?app_id={Uri.EscapeDataString(appId!)}" +
-                      $"&redirect_uri={Uri.EscapeDataString(cb)}" +
+            var url = $"{permissionBase}?app_id={Uri.EscapeDataString(app.AppId!)}" +
+                      $"&redirect_uri={Uri.EscapeDataString(callbackUrl)}" +
                       $"&state={Uri.EscapeDataString(state)}" +
                       $"&code_challenge={Uri.EscapeDataString(codeChallenge)}" +
                       $"&code_challenge_method=S256";
             return Redirect(url);
         }
 
-        // GET https://ql.asianasa.com/api/zalo/oauth/callback?code=...&state=...
-        // Một số luồng Zalo trả về KHÔNG có state -> fallback legacy (không dùng PKCE).
-        [HttpGet("callback")]
-        public async Task<IActionResult> Callback([FromQuery] string? code, [FromQuery] string? state, CancellationToken ct)
+        // GET .../api/zalo/oauth/{appCode}/callback?code=...&state=...
+        // Một số luồng có thể không trả state -> fallback legacy (không PKCE).
+        [HttpGet("{appCode}/callback")]
+        public async Task<IActionResult> Callback(
+            [FromRoute] string appCode,
+            [FromQuery] string? code,
+            [FromQuery] string? state,
+            CancellationToken ct)
         {
-            if (string.IsNullOrWhiteSpace(code))
-                return Content("Missing code/state.");
+            if (string.IsNullOrWhiteSpace(appCode)) return Content("Missing appCode.");
+            if (string.IsNullOrWhiteSpace(code)) return Content("Missing code/state.");
 
-            var appId = _cfg["Zalo:AppId"];
-            var appSecret = _cfg["Zalo:AppSecret"];
+            var app = GetAppCfg(appCode);
             var tokenUrl = _cfg["Zalo:OAuthRefreshUrl"] ?? "https://oauth.zaloapp.com/v4/oa/access_token";
-            if (string.IsNullOrWhiteSpace(appId) || string.IsNullOrWhiteSpace(appSecret))
-                return Content("Missing AppId/AppSecret in appsettings.");
+            if (string.IsNullOrWhiteSpace(app.AppId) || string.IsNullOrWhiteSpace(app.AppSecret))
+                return Content($"Missing AppId/AppSecret for appCode '{appCode}'.");
 
             using var client = _http.CreateClient();
             client.DefaultRequestHeaders.Remove("secret_key");
-            client.DefaultRequestHeaders.Add("secret_key", appSecret);
+            client.DefaultRequestHeaders.Add("secret_key", app.AppSecret!);
 
-            // Nếu có state + tìm được code_verifier thì dùng chuẩn PKCE;
-            // nếu không có (hoặc hết hạn trong cache) thì đổi token theo luồng legacy (không code_verifier).
             var form = new Dictionary<string, string>
             {
                 ["grant_type"] = "authorization_code",
-                ["app_id"] = appId!,
+                ["app_id"] = app.AppId!,
                 ["code"] = code!
             };
 
             if (!string.IsNullOrWhiteSpace(state) &&
-                _cache.TryGetValue("zalo.pkce." + state, out string? codeVerifier) &&
+                _cache.TryGetValue($"zalo.pkce.{appCode}.{state}", out string? codeVerifier) &&
                 !string.IsNullOrWhiteSpace(codeVerifier))
             {
                 form["code_verifier"] = codeVerifier!;
             }
             else
             {
-                _log.LogInformation("Zalo OAuth callback without usable state/PKCE. Proceeding with legacy exchange.");
+                _log.LogInformation("Zalo OAuth callback without usable state/PKCE (app={App}). Proceeding legacy exchange.", appCode);
             }
 
             var res = await client.PostAsync(tokenUrl, new FormUrlEncodedContent(form), ct);
             var text = await res.Content.ReadAsStringAsync(ct);
             if (!res.IsSuccessStatusCode)
             {
-                _log.LogWarning("Zalo token exchange failed: {Status} {Body}", res.StatusCode, text);
+                _log.LogWarning("Zalo token exchange failed (app={App}): {Status} {Body}", appCode, res.StatusCode, text);
                 return Content($"Exchange failed: {(int)res.StatusCode}\n{text}");
             }
 
@@ -112,26 +124,51 @@ namespace ManageEmployee.Controllers
                 var access = root.GetProperty("access_token").GetString();
                 var refresh = root.TryGetProperty("refresh_token", out var r) ? r.GetString() : null;
                 var expiresIn = ReadIntFlexible(root, "expires_in", 3600);
+
                 if (string.IsNullOrWhiteSpace(access))
                     return Content("Token exchange OK but access_token missing.");
 
-                await _tokenStore.SaveAsync(new ManageEmployee.Entities.Chatbot.ZaloTokens
+                await _tokenStore.SaveAsync(appCode, new ManageEmployee.Entities.Chatbot.ZaloTokens
                 {
                     AccessToken = access!,
                     RefreshToken = refresh,
                     ExpiresAt = DateTimeOffset.UtcNow.AddSeconds(expiresIn)
                 }, ct);
 
-                return Content("✅ Zalo OA token stored. You can close this tab.");
+                return Content($"✅ Zalo OA token stored for app '{appCode}'. You can close this tab.");
             }
             catch (Exception ex)
             {
-                _log.LogError(ex, "Parse token response error: {Body}", text);
-                return Content("Token saved failed: " + ex.Message + "\n" + text);
+                _log.LogError(ex, "Parse token response error (app={App}). Body={Body}", appCode, text);
+                return Content("Token save failed: " + ex.Message + "\n" + text);
             }
         }
 
-        // ==== Helpers ====
+        // ===== Helpers =====
+
+        private sealed record AppCfg(string Code, string? AppId, string? AppSecret);
+
+        private AppCfg GetAppCfg(string appCode)
+        {
+            // Tìm theo Zalo:Apps[*]
+            var apps = _cfg.GetSection("Zalo:Apps").GetChildren();
+            foreach (var a in apps)
+            {
+                var code = a["Code"];
+                if (!string.IsNullOrWhiteSpace(code) &&
+                    code.Equals(appCode, StringComparison.OrdinalIgnoreCase))
+                {
+                    // fallback vào cặp single-app nếu thiếu
+                    return new AppCfg(
+                        code,
+                        a["AppId"] ?? _cfg["Zalo:AppId"],
+                        a["AppSecret"] ?? _cfg["Zalo:AppSecret"]);
+                }
+            }
+            // Backward-compatible: cho phép “default” chạy bằng key cũ
+            return new AppCfg(appCode, _cfg["Zalo:AppId"], _cfg["Zalo:AppSecret"]);
+        }
+
         private static int ReadIntFlexible(JsonElement root, string prop, int @default)
         {
             if (!root.TryGetProperty(prop, out var el)) return @default;
